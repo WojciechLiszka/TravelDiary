@@ -12,4 +12,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TravelDiary.Application\TravelDiary.Application.csproj" />
+    <ProjectReference Include="..\TravelDiary.Domain\TravelDiary.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

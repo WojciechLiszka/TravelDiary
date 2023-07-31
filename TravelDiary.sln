@@ -5,6 +5,12 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelDiary.MVC", "TravelDiary.MVC\TravelDiary.MVC.csproj", "{AC0EC23B-5EC6-46D6-94E0-DA114A6DF801}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelDiary.Infrastructure", "TravelDiary.Infrastructure\TravelDiary.Infrastructure.csproj", "{C457417D-2011-4689-885B-35D32218F88E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelDiary.Domain", "TravelDiary.Domain\TravelDiary.Domain.csproj", "{BA6294A9-CFB8-4E36-BBCB-BEBC28765313}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelDiary.Application", "TravelDiary.Application\TravelDiary.Application.csproj", "{E1C917AE-204D-45A7-AF51-8B3DFF574F08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +21,23 @@ Global
 		{AC0EC23B-5EC6-46D6-94E0-DA114A6DF801}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC0EC23B-5EC6-46D6-94E0-DA114A6DF801}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC0EC23B-5EC6-46D6-94E0-DA114A6DF801}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C457417D-2011-4689-885B-35D32218F88E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C457417D-2011-4689-885B-35D32218F88E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C457417D-2011-4689-885B-35D32218F88E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C457417D-2011-4689-885B-35D32218F88E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA6294A9-CFB8-4E36-BBCB-BEBC28765313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA6294A9-CFB8-4E36-BBCB-BEBC28765313}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA6294A9-CFB8-4E36-BBCB-BEBC28765313}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA6294A9-CFB8-4E36-BBCB-BEBC28765313}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1C917AE-204D-45A7-AF51-8B3DFF574F08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1C917AE-204D-45A7-AF51-8B3DFF574F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1C917AE-204D-45A7-AF51-8B3DFF574F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1C917AE-204D-45A7-AF51-8B3DFF574F08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4253E59D-97B3-4DD6-AC07-92DA3D7BF038}
 	EndGlobalSection
 EndGlobal
