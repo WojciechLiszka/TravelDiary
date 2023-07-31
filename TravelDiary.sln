@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelDiary.MVC", "TravelDiary.MVC\TravelDiary.MVC.csproj", "{AC0EC23B-5EC6-46D6-94E0-DA114A6DF801}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelDiary.MVC", "TravelDiary.MVC\TravelDiary.MVC.csproj", "{AC0EC23B-5EC6-46D6-94E0-DA114A6DF801}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelDiary.Infrastructure", "TravelDiary.Infrastructure\TravelDiary.Infrastructure.csproj", "{C457417D-2011-4689-885B-35D32218F88E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelDiary.Infrastructure", "TravelDiary.Infrastructure\TravelDiary.Infrastructure.csproj", "{C457417D-2011-4689-885B-35D32218F88E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelDiary.Domain", "TravelDiary.Domain\TravelDiary.Domain.csproj", "{BA6294A9-CFB8-4E36-BBCB-BEBC28765313}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelDiary.Domain", "TravelDiary.Domain\TravelDiary.Domain.csproj", "{BA6294A9-CFB8-4E36-BBCB-BEBC28765313}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelDiary.Application", "TravelDiary.Application\TravelDiary.Application.csproj", "{E1C917AE-204D-45A7-AF51-8B3DFF574F08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelDiary.Application", "TravelDiary.Application\TravelDiary.Application.csproj", "{E1C917AE-204D-45A7-AF51-8B3DFF574F08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelDiary.Api", "TravelDiary.Api\TravelDiary.Api.csproj", "{9344CFEB-B069-411A-A84C-96576CBDB162}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{E1C917AE-204D-45A7-AF51-8B3DFF574F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1C917AE-204D-45A7-AF51-8B3DFF574F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1C917AE-204D-45A7-AF51-8B3DFF574F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9344CFEB-B069-411A-A84C-96576CBDB162}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9344CFEB-B069-411A-A84C-96576CBDB162}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9344CFEB-B069-411A-A84C-96576CBDB162}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9344CFEB-B069-411A-A84C-96576CBDB162}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
