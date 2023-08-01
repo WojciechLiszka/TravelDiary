@@ -48,7 +48,7 @@ namespace TravelDiary.Infrastructure.Persistence
             {
                 eb
                 .HasMany(e => e.Photos)
-                .WithOne(e => e.Entry)
+                .WithOne(e => e.Entry);
             });
         }
     }
