@@ -7,5 +7,6 @@
         public string PasswordHash { get; set; } = null!;
         public UserDetails UserDetails { get; set; } = null!;
         public List<Diary> UserDiaries { get; set; } = new List<Diary>();
+        public UserRole Role { get; set; } = null!;
     }
 }

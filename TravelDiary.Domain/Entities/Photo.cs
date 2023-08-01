@@ -6,5 +6,6 @@
         public string Tittle { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string Url { get; set; } = null!;
+        public Entry Entry { get; set; }
     }
 }
