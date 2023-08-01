@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TravelDiary.Application\TravelDiary.Application.csproj" />
     <ProjectReference Include="..\TravelDiary.Domain\TravelDiary.Domain.csproj" />
+    <ProjectReference Include="..\TravelDiary.Infrastructure\TravelDiary.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
