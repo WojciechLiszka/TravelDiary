@@ -17,6 +17,11 @@ namespace TravelDiary.Infrastructure.Repositories
         public bool EmailInUse(string email)
             => _dbContext.Users.Any(u => u.UserDetails.Email == email);
 
+        public async Task<User?> GetByEmail(string email)
+        {
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.UserDetails.Email == email);
+        }
+
         public async Task Register(User user)
         {
             _dbContext.Users.Add(user);

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TravelDiary.Application.AccountService.Commands.LoginUserAccountCommand;
 using TravelDiary.Application.AccountService.Commands.RegisterUserAccountCommand;
 
 namespace TravelDiary.Api.Controllers
@@ -14,6 +15,7 @@ namespace TravelDiary.Api.Controllers
         {
             _mediator = mediator;
         }
+
         [HttpPost]
         [Route("Register")]
         public async Task<ActionResult> Register([FromBody] RegisterUserAccountCommand command)
@@ -24,6 +26,14 @@ namespace TravelDiary.Api.Controllers
             }
             await _mediator.Send(command);
             return Ok();
+        }
+
+        [HttpPost]
+        [Route("Login")]
+        public async Task<ActionResult<string>> Login([FromQuery] LoginUserAccountCommand command)
+        {
+            var token = await _mediator.Send(command);
+            return Ok(token);
         }
     }
 }

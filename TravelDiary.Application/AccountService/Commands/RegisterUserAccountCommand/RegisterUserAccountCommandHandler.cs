@@ -28,7 +28,7 @@ namespace TravelDiary.Application.AccountService.Commands.RegisterUserAccountCom
             var newUser = new User()
             {
                 NickName = request.NickName,
-                Role = userRole,
+                UserRole = userRole,
                 UserDetails = new UserDetails()
                 {
                     Email = request.Email,

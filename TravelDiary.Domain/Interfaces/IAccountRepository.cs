@@ -9,5 +9,7 @@ namespace TravelDiary.Domain.Interfaces
         Task Register(User user);
 
         bool EmailInUse(string email);
+
+        Task<User> GetByEmail(string email);
     }
 }
