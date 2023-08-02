@@ -5,11 +5,11 @@ using TravelDiary.Infrastructure.Persistence;
 
 namespace TravelDiary.Infrastructure.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class AccountRepository : IAccountRepository
     {
         private readonly TravelDiaryDbContext _dbContext;
 
-        public UserRepository(TravelDiaryDbContext dbContext)
+        public AccountRepository(TravelDiaryDbContext dbContext)
         {
             _dbContext = dbContext;
         }

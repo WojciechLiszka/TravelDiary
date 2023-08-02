@@ -16,7 +16,7 @@ namespace TravelDiary.Infrastructure.Extensions
 
             services.AddScoped<IDiaryRepository, DiaryRepository>();
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
 
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 

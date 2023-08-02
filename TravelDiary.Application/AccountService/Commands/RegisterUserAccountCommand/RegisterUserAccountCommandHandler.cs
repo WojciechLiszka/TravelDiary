@@ -7,11 +7,11 @@ namespace TravelDiary.Application.AccountService.Commands.RegisterUserAccountCom
 {
     public class RegisterUserAccountCommandHandler : IRequestHandler<RegisterUserAccountCommand>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IAccountRepository _userRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IUserRoleRepository _userRoleRepository;
 
-        public RegisterUserAccountCommandHandler(IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IUserRoleRepository userRoleRepository)
+        public RegisterUserAccountCommandHandler(IAccountRepository userRepository, IPasswordHasher<User> passwordHasher, IUserRoleRepository userRoleRepository)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;

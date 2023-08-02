@@ -5,6 +5,5 @@ namespace TravelDiary.Application.AccountService.Commands.RegisterUserAccountCom
 {
     public class RegisterUserAccountCommand : RegisterUserAccountDto, IRequest
     {
-
     }
 }

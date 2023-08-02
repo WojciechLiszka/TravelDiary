@@ -45,7 +45,7 @@ namespace TravelDiary.ApiTests.Controllers
         {
             // arrange
             _userRoleRepositoryMock
-                .Setup(e => e.GetByName(It.IsAny<String>()))
+                .Setup(e => e.GetByName(It.IsAny<string>()))
                 .ReturnsAsync(new UserRole()
                 {
                     Id = 1,
@@ -73,7 +73,7 @@ namespace TravelDiary.ApiTests.Controllers
         }
 
         [Theory]
-        [InlineData("test@email.com", "password", "notThesamepassword", "John", "Doe", "USA", "JDoe")]//Passwords are not the same
+        [InlineData("test@email.com", "password", "notThesamepassword", "John", "Doe", "USA", "JDoe")] // Passwords are not the same
         [InlineData("", "password", "password", "John", "Doe", "USA", "JDoe")] // Empty email
         [InlineData("testemail.com", "password", "password", "John", "Doe", "USA", "JDoe")] // Invalid email format
         [InlineData("test@email.com", "", "password", "John", "Doe", "USA", "JDoe")] // Empty password
@@ -89,13 +89,13 @@ namespace TravelDiary.ApiTests.Controllers
         [InlineData("test@email.com", "password", "password", "John", "Doe", null, "JDoe")] // Null country
         [InlineData("test@email.com", "password", "password", "John", "Doe", "USA", null)] // Null nickname
         [InlineData("test@email.com", "password", null, "John", "Doe", "USA", "JDoe")] // Null confirm password
-        [InlineData(null, null, null, null, null, null, null)] // All values are null
         [InlineData("test@email.com", "pass", "pass", "John", "Doe", "USA", "JDoe")] // Password less than 6 characters
+        [InlineData(null, null, null, null, null, null, null)] // All values are null
         public async Task RegisterUser_ForInValidDtoParams_ReturnsBadRequest(string email, string password, string confirmPasswrod, string firstName, string lastName, string country, string nickname)
         {
             // arrange
             _userRoleRepositoryMock
-                .Setup(e => e.GetByName(It.IsAny<String>()))
+                .Setup(e => e.GetByName(It.IsAny<string>()))
                 .ReturnsAsync(new UserRole()
                 {
                     Id = 1,

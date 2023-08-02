@@ -5,7 +5,7 @@ namespace TravelDiary.Application.AccountService.Commands.RegisterUserAccountCom
 {
     public class RegisterUserCommandValidaTor : AbstractValidator<RegisterUserAccountCommand>
     {
-        public RegisterUserCommandValidaTor(IUserRepository repository)
+        public RegisterUserCommandValidaTor(IAccountRepository repository)
         {
             RuleFor(x => x.Email)
                     .NotEmpty()

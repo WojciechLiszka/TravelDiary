@@ -2,7 +2,7 @@
 
 namespace TravelDiary.Domain.Interfaces
 {
-    public interface IUserRepository
+    public interface IAccountRepository
     {
         Task<User?> TakeFirst(); //To Delete
 
