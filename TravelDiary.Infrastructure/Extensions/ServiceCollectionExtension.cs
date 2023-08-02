@@ -14,6 +14,7 @@ namespace TravelDiary.Infrastructure.Extensions
             services.AddDbContext<TravelDiaryDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("TravelDiary")));
 
             services.AddScoped<IDiaryRepository, DiaryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
     }
 }
