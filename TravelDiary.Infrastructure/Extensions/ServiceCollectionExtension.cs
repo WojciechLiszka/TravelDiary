@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TravelDiary.Domain.Interfaces;
 using TravelDiary.Infrastructure.Persistence;
+using TravelDiary.Infrastructure.Repositories;
 
 namespace TravelDiary.Infrastructure.Extensions
 {
@@ -9,7 +11,10 @@ namespace TravelDiary.Infrastructure.Extensions
     {
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<TravelDiaryDBContext>(options => options.UseSqlServer(configuration.GetConnectionString("TravelDiary")));
+            services.AddDbContext<TravelDiaryDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("TravelDiary")));
+
+            services.AddScoped<IDiaryRepository, DiaryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
     }
 }

@@ -3,7 +3,7 @@ using TravelDiary.Domain.Entities;
 
 namespace TravelDiary.Infrastructure.Persistence
 {
-    public class TravelDiaryDBContext : DbContext
+    public class TravelDiaryDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Entry> Entries { get; set; }
@@ -11,7 +11,7 @@ namespace TravelDiary.Infrastructure.Persistence
         public DbSet<Diary> Diaries { get; set; }
         public DbSet<UserRole> Roles { get; set; }
 
-        public TravelDiaryDBContext(DbContextOptions<TravelDiaryDBContext> options) : base(options)
+        public TravelDiaryDbContext(DbContextOptions<TravelDiaryDbContext> options) : base(options)
         {
         }
 
@@ -32,10 +32,10 @@ namespace TravelDiary.Infrastructure.Persistence
 
                 eb
                 .OwnsOne(u => u.UserDetails);
-
                 eb
                 .HasMany(u => u.UserDiaries)
-                .WithOne(d => d.CreatedBy);
+                .WithOne(d => d.CreatedBy)
+                .HasForeignKey(d=>d.CreatedById);
             });
 
             modelBuilder.Entity<Diary>(eb =>

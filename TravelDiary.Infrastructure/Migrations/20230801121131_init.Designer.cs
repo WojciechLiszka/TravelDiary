@@ -11,7 +11,7 @@ using TravelDiary.Infrastructure.Persistence;
 
 namespace TravelDiary.Infrastructure.Migrations
 {
-    [DbContext(typeof(TravelDiaryDBContext))]
+    [DbContext(typeof(TravelDiaryDbContext))]
     [Migration("20230801121131_init")]
     partial class init
     {

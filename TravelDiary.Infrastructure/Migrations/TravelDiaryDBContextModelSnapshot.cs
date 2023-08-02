@@ -10,7 +10,7 @@ using TravelDiary.Infrastructure.Persistence;
 
 namespace TravelDiary.Infrastructure.Migrations
 {
-    [DbContext(typeof(TravelDiaryDBContext))]
+    [DbContext(typeof(TravelDiaryDbContext))]
     partial class TravelDiaryDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -52,7 +52,7 @@ namespace TravelDiary.Infrastructure.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.ToTable("Diaries");
+                    b.ToTable("Diaries", (string)null);
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.Entry", b =>
@@ -79,7 +79,7 @@ namespace TravelDiary.Infrastructure.Migrations
 
                     b.HasIndex("DiaryId");
 
-                    b.ToTable("Entries");
+                    b.ToTable("Entries", (string)null);
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.Photo", b =>
@@ -107,7 +107,7 @@ namespace TravelDiary.Infrastructure.Migrations
 
                     b.HasIndex("EntryId");
 
-                    b.ToTable("Photos");
+                    b.ToTable("Photos", (string)null);
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.User", b =>
@@ -132,7 +132,7 @@ namespace TravelDiary.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.UserRole", b =>
@@ -149,7 +149,7 @@ namespace TravelDiary.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.Diary", b =>
@@ -193,7 +193,7 @@ namespace TravelDiary.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("TravelDiary.Domain.Entities.UserDetails", "UserDetails", b1 =>
+                    b.OwnsOne("TravelDiary.Domain.Entities.User.UserDetails#TravelDiary.Domain.Entities.UserDetails", "UserDetails", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
@@ -212,7 +212,7 @@ namespace TravelDiary.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("Users", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
