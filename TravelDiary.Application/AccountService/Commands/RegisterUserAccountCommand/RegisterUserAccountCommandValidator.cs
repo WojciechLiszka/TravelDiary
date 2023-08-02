@@ -40,6 +40,11 @@ namespace TravelDiary.Application.AccountService.Commands.RegisterUserAccountCom
                 .NotNull()
                 .NotEmpty()
                 .Length(3, 20);
+
+            RuleFor(x => x.NickName)
+               .NotNull()
+               .NotEmpty()
+               .Length(3, 20);
         }
     }
 }
