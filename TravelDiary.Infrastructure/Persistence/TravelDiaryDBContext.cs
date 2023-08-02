@@ -22,8 +22,9 @@ namespace TravelDiary.Infrastructure.Persistence
             modelBuilder.Entity<User>(eb =>
             {
                 eb
-               .HasOne(u => u.Role)
-               .WithMany(r => r.Users);
+               .HasOne(u => u.UserRole)
+               .WithMany(r => r.Users)
+               .HasForeignKey(u=>u.UserRoleId);
 
                 eb
                 .Property(u => u.NickName)

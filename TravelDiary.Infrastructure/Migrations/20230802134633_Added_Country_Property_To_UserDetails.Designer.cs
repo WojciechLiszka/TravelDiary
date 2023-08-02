@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelDiary.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using TravelDiary.Infrastructure.Persistence;
 namespace TravelDiary.Infrastructure.Migrations
 {
     [DbContext(typeof(TravelDiaryDbContext))]
-    partial class TravelDiaryDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230802134633_Added_Country_Property_To_UserDetails")]
+    partial class Added_Country_Property_To_UserDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,12 +128,12 @@ namespace TravelDiary.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserRoleId")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserRoleId");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -187,9 +190,9 @@ namespace TravelDiary.Infrastructure.Migrations
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.User", b =>
                 {
-                    b.HasOne("TravelDiary.Domain.Entities.UserRole", "UserRole")
+                    b.HasOne("TravelDiary.Domain.Entities.UserRole", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("UserRoleId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -222,10 +225,10 @@ namespace TravelDiary.Infrastructure.Migrations
                                 .HasForeignKey("UserId");
                         });
 
+                    b.Navigation("Role");
+
                     b.Navigation("UserDetails")
                         .IsRequired();
-
-                    b.Navigation("UserRole");
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.Diary", b =>

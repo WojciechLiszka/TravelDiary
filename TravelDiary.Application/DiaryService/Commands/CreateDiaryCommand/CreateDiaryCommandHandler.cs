@@ -7,9 +7,9 @@ namespace TravelDiary.Application.DiaryService.Commands.CreateDiaryCommand
     public class CreateDiaryCommandHandler : IRequestHandler<CreateDiaryCommand, string>
     {
         private readonly IDiaryRepository _diaryRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IAccountRepository _userRepository;
 
-        public CreateDiaryCommandHandler(IDiaryRepository diaryRepository, IUserRepository userRepository)
+        public CreateDiaryCommandHandler(IDiaryRepository diaryRepository, IAccountRepository userRepository)
         {
             _diaryRepository = diaryRepository;
             _userRepository = userRepository;
