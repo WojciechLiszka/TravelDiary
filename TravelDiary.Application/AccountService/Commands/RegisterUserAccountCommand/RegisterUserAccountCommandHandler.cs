@@ -9,18 +9,26 @@ namespace TravelDiary.Application.AccountService.Commands.RegisterUserAccountCom
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IUserRoleRepository _userRoleRepository;
 
-        public RegisterUserAccountCommandHandler(IUserRepository userRepository, IPasswordHasher<User> passwordHasher)
+        public RegisterUserAccountCommandHandler(IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IUserRoleRepository userRoleRepository)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
+            _userRoleRepository = userRoleRepository;
         }
 
         public async Task Handle(RegisterUserAccountCommand request, CancellationToken cancellationToken)
         {
+            var userRole = await _userRoleRepository.GetByName("User");
+            if (userRole == null)
+            {
+                throw new Exception("Cannot find User role");
+            }
             var newUser = new User()
             {
                 NickName = request.NickName,
+                Role = userRole,
                 UserDetails = new UserDetails()
                 {
                     Email = request.Email,
@@ -29,13 +37,11 @@ namespace TravelDiary.Application.AccountService.Commands.RegisterUserAccountCom
                     Country = request.Country
                 }
             };
-
             var passwordhash = _passwordHasher.HashPassword(newUser, request.Password);
 
             newUser.PasswordHash = passwordhash;
 
             await _userRepository.Register(newUser);
-
         }
     }
 }

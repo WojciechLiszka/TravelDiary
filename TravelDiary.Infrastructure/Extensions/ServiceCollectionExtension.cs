@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TravelDiary.Domain.Interfaces;
 using TravelDiary.Infrastructure.Persistence;
 using TravelDiary.Infrastructure.Repositories;
+using TravelDiary.Infrastructure.Seeders;
 
 namespace TravelDiary.Infrastructure.Extensions
 {
@@ -14,7 +15,12 @@ namespace TravelDiary.Infrastructure.Extensions
             services.AddDbContext<TravelDiaryDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("TravelDiary")));
 
             services.AddScoped<IDiaryRepository, DiaryRepository>();
+
             services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+
+            services.AddScoped<RoleSeeder>();
         }
     }
 }
