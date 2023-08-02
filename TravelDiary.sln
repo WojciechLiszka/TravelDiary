@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelDiary.Domain", "Trave
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelDiary.Application", "TravelDiary.Application\TravelDiary.Application.csproj", "{E1C917AE-204D-45A7-AF51-8B3DFF574F08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelDiary.Api", "TravelDiary.Api\TravelDiary.Api.csproj", "{9344CFEB-B069-411A-A84C-96576CBDB162}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelDiary.Api", "TravelDiary.Api\TravelDiary.Api.csproj", "{9344CFEB-B069-411A-A84C-96576CBDB162}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelDiary.ApiTests", "TravelDiary.ApiTests\TravelDiary.ApiTests.csproj", "{B4782C45-2CCB-4846-AD0D-D83035980498}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{9344CFEB-B069-411A-A84C-96576CBDB162}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9344CFEB-B069-411A-A84C-96576CBDB162}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9344CFEB-B069-411A-A84C-96576CBDB162}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4782C45-2CCB-4846-AD0D-D83035980498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4782C45-2CCB-4846-AD0D-D83035980498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4782C45-2CCB-4846-AD0D-D83035980498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4782C45-2CCB-4846-AD0D-D83035980498}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
