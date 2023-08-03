@@ -14,6 +14,12 @@ namespace TravelDiary.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task Delete(User user)
+        {
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public bool EmailInUse(string email)
             => _dbContext.Users.Any(u => u.UserDetails.Email == email);
 

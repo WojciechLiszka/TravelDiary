@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TravelDiary.Application.AccountService.Commands.DeleteUserAccountCommand;
 using TravelDiary.Application.AccountService.Commands.LoginUserAccountCommand;
 using TravelDiary.Application.AccountService.Commands.RegisterUserAccountCommand;
 
@@ -34,6 +36,14 @@ namespace TravelDiary.Api.Controllers
         {
             var token = await _mediator.Send(command);
             return Ok(token);
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<ActionResult> Delete([FromQuery] DeleteUserAccountCommand command)
+        {
+            await _mediator.Send(command);
+            return NoContent();
         }
     }
 }
