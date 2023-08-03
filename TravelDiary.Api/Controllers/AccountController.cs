@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TravelDiary.Application.AccountService.Commands.DeleteUserAccountCommand;
 using TravelDiary.Application.AccountService.Commands.LoginUserAccountCommand;
 using TravelDiary.Application.AccountService.Commands.RegisterUserAccountCommand;
+using TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetailsCommand;
 
 namespace TravelDiary.Api.Controllers
 {
@@ -44,6 +45,18 @@ namespace TravelDiary.Api.Controllers
         {
             await _mediator.Send(command);
             return NoContent();
+        }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<ActionResult> Update([FromQuery] UpdateUserDetailsCommand command)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            await _mediator.Send(command);
+            return Ok();
         }
     }
 }

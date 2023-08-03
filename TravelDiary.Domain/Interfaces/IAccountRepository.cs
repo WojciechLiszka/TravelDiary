@@ -10,8 +10,12 @@ namespace TravelDiary.Domain.Interfaces
 
         bool EmailInUse(string email);
 
-        Task<User> GetByEmail(string email);
+        Task<User?> GetByEmail(string email);
 
         Task Delete(User user);
+
+        Task<User?> GetById(Guid id);
+
+        Task Commit();
     }
 }

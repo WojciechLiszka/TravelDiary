@@ -14,6 +14,11 @@ namespace TravelDiary.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task Commit()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task Delete(User user)
         {
             _dbContext.Users.Remove(user);
@@ -26,6 +31,11 @@ namespace TravelDiary.Infrastructure.Repositories
         public async Task<User?> GetByEmail(string email)
         {
             return await _dbContext.Users.FirstOrDefaultAsync(u => u.UserDetails.Email == email);
+        }
+
+        public async Task<User?> GetById(Guid id)
+        {
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task Register(User user)
