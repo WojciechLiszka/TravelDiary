@@ -6,6 +6,8 @@ using TravelDiary.Infrastructure.Persistence;
 using TravelDiary.Infrastructure.Repositories;
 using TravelDiary.Infrastructure.Seeders;
 
+using TravelDiary.Infrastructure.Services;
+
 namespace TravelDiary.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtension
@@ -21,6 +23,8 @@ namespace TravelDiary.Infrastructure.Extensions
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
             services.AddScoped<RoleSeeder>();
+
+            services.AddScoped<IUserContextService, UserContextService>();
         }
     }
 }
