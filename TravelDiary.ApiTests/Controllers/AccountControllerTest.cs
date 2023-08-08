@@ -1,9 +1,11 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using TravelDiary.ApiTests.Helpers;
+using TravelDiary.Application.AccountService.Commands.LoginUserAccountCommand;
 using TravelDiary.Application.AccountService.Commands.RegisterUserAccountCommand;
 using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Interfaces;
@@ -17,6 +19,7 @@ namespace TravelDiary.ApiTests.Controllers
         private readonly HttpClient _client;
         private readonly WebApplicationFactory<Program> _factory;
         private readonly Mock<IUserRoleRepository> _userRoleRepositoryMock = new Mock<IUserRoleRepository>();
+        private readonly Mock<IPasswordHasher<User>> _passwordHasherMock = new Mock<IPasswordHasher<User>>();
 
         public AccountControllerTest(WebApplicationFactory<Program> factory)
         {
@@ -29,7 +32,8 @@ namespace TravelDiary.ApiTests.Controllers
                            .SingleOrDefault(service => service.ServiceType == typeof(Microsoft.EntityFrameworkCore.DbContextOptions<TravelDiaryDbContext>));
                        services.Remove(dbContextOptions);
 
-                       services.AddSingleton<IUserRoleRepository>(_userRoleRepositoryMock.Object);
+                       services.AddSingleton<IPasswordHasher<User>>(_passwordHasherMock.Object);
+
                        services
                         .AddDbContext<TravelDiaryDbContext>(options => options.UseInMemoryDatabase("TravelDiaryDb")
                         .EnableSensitiveDataLogging())
@@ -40,18 +44,43 @@ namespace TravelDiary.ApiTests.Controllers
             _client = _factory.CreateClient();
         }
 
+        private async Task SeedUser(User user)
+        {
+            var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
+            using var scope = scopeFactory.CreateScope();
+            var _dbContext = scope.ServiceProvider.GetService<TravelDiaryDbContext>();
+            if (!_dbContext.Users.Contains(user))
+            {
+                _dbContext.Users.Add(user);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
+        private async Task SeedRole(UserRole role)
+        {
+            var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
+            using var scope = scopeFactory.CreateScope();
+            var _dbContext = scope.ServiceProvider.GetService<TravelDiaryDbContext>();
+            if (!_dbContext.Roles.Contains(role))
+            {
+                _dbContext.Roles.Add(role);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
         [Fact]
         public async Task RegisterUser_ForValidDtoParams_ReturnsOk()
         {
             // arrange
-            _userRoleRepositoryMock
-                .Setup(e => e.GetByName(It.IsAny<string>()))
-                .ReturnsAsync(new UserRole()
-                {
-                    Id = 1,
-                    RoleName = "User",
-                })
-                ;
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            _passwordHasherMock
+                .Setup(e => e.HashPassword(It.IsAny<User>(), It.IsAny<string>()))
+               .Returns("HashedPassword");
 
             var command = new RegisterUserAccountCommand()
             {
@@ -94,14 +123,11 @@ namespace TravelDiary.ApiTests.Controllers
         public async Task RegisterUser_ForInValidDtoParams_ReturnsBadRequest(string email, string password, string confirmPasswrod, string firstName, string lastName, string country, string nickname)
         {
             // arrange
-            _userRoleRepositoryMock
-                .Setup(e => e.GetByName(It.IsAny<string>()))
-                .ReturnsAsync(new UserRole()
-                {
-                    Id = 1,
-                    RoleName = "User",
-                })
-                ;
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
 
             var command = new RegisterUserAccountCommand()
             {
@@ -120,6 +146,50 @@ namespace TravelDiary.ApiTests.Controllers
             // assert
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task LoginUser_ForvalidParams_ReturnsOK()
+        {
+            // arrange
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var validPassword = "password";
+            _passwordHasherMock
+                .Setup(e => e.VerifyHashedPassword(It.IsAny<User>(), It.IsAny<string>(), It.Is<string>(password => password == validPassword)))
+                .Returns(PasswordVerificationResult.Success);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = validPassword,
+                UserRoleId = 1,
+            };
+            await SeedUser(user);
+            var command = new LoginUserAccountCommand()
+            {
+                Email = "test@email.com",
+                Password = validPassword,
+            };
+            var httpContent = command.ToJsonHttpContent();
+            // act
+
+            var response = await _client.PostAsync($"{_route}/Login", httpContent);
+            // assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace TravelDiary.Api.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<ActionResult<string>> Login([FromQuery] LoginUserAccountCommand command)
+        public async Task<ActionResult<string>> Login([FromBody] LoginUserAccountCommand command)
         {
             var token = await _mediator.Send(command);
             return Ok(token);
@@ -41,7 +41,7 @@ namespace TravelDiary.Api.Controllers
 
         [HttpDelete]
         [Authorize]
-        public async Task<ActionResult> Delete([FromQuery] DeleteUserAccountCommand command)
+        public async Task<ActionResult> Delete([FromBody] DeleteUserAccountCommand command)
         {
             await _mediator.Send(command);
             return NoContent();
@@ -49,7 +49,7 @@ namespace TravelDiary.Api.Controllers
 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult> Update([FromQuery] UpdateUserDetailsCommand command)
+        public async Task<ActionResult> Update([FromBody] UpdateUserDetailsCommand command)
         {
             if (!ModelState.IsValid)
             {
