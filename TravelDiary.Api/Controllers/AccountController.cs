@@ -41,8 +41,13 @@ namespace TravelDiary.Api.Controllers
 
         [HttpDelete]
         [Authorize]
-        public async Task<ActionResult> Delete([FromBody] DeleteUserAccountCommand command)
+        public async Task<ActionResult> Delete([FromQuery] string password)
         {
+            var command = new DeleteUserAccountCommand()
+            {
+                Password = password
+            };
+       
             await _mediator.Send(command);
             return NoContent();
         }
