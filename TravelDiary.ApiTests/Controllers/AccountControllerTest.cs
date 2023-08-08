@@ -377,5 +377,47 @@ namespace TravelDiary.ApiTests.Controllers
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
+
+        [Fact]
+        public async Task Update_WithoutuserToken_ReturnsUnauthorized()
+        {
+            // arrange
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(user);
+
+            var command = new UpdateUserDetailsCommand()
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Country = "USA"
+            };
+            var httpContent = command.ToJsonHttpContent();
+
+            // act
+
+            var response = await _client.PutAsync($"{_route}", httpContent);
+            // assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+        }
     }
 }
