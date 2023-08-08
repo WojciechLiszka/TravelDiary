@@ -2,14 +2,21 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Moq;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
 using TravelDiary.ApiTests.Helpers;
 using TravelDiary.Application.AccountService.Commands.LoginUserAccountCommand;
 using TravelDiary.Application.AccountService.Commands.RegisterUserAccountCommand;
 using TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetailsCommand;
 using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Interfaces;
+using TravelDiary.Domain.Models;
 using TravelDiary.Infrastructure.Persistence;
 
 namespace TravelDiary.ApiTests.Controllers
@@ -19,11 +26,22 @@ namespace TravelDiary.ApiTests.Controllers
         private const string _route = "Api/Account";
         private readonly HttpClient _client;
         private readonly WebApplicationFactory<Program> _factory;
+        private readonly AuthenticationSettings _authenticationSettings;
         private readonly Mock<IUserRoleRepository> _userRoleRepositoryMock = new Mock<IUserRoleRepository>();
         private readonly Mock<IPasswordHasher<User>> _passwordHasherMock = new Mock<IPasswordHasher<User>>();
+        private readonly IConfiguration _configuration;
+        private HttpClient _userClient;
 
         public AccountControllerTest(WebApplicationFactory<Program> factory)
         {
+            _configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+            var authenticationSettings = new AuthenticationSettings();
+
+            _configuration.GetSection("Authentication").Bind(authenticationSettings);
+            _authenticationSettings = authenticationSettings;
+
             _factory = factory
                .WithWebHostBuilder(builder =>
                {
@@ -43,6 +61,33 @@ namespace TravelDiary.ApiTests.Controllers
                });
 
             _client = _factory.CreateClient();
+            _userClient = _factory.CreateClient();
+        }
+
+        private string GenerateJwtToken(User user, UserRole role)
+        {
+            // arrange
+
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email,"test@email.com"),
+                new Claim(ClaimTypes.Name, "John Doe"),
+                new Claim(ClaimTypes.Role, role.RoleName)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);
+
+            var token = new JwtSecurityToken(_authenticationSettings.JwtIssuer,
+                _authenticationSettings.JwtIssuer,
+                claims,
+                expires: expires,
+                signingCredentials: cred);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            return tokenHandler.WriteToken(token);
         }
 
         private async Task SeedUser(User user)
@@ -150,7 +195,7 @@ namespace TravelDiary.ApiTests.Controllers
         }
 
         [Fact]
-        public async Task LoginUser_ForvalidParams_ReturnsOK()
+        public async Task LoginUser_ForValidParams_ReturnsOK()
         {
             // arrange
             var role = new UserRole()
@@ -222,7 +267,7 @@ namespace TravelDiary.ApiTests.Controllers
                 },
 
                 PasswordHash = validPassword,
-                UserRoleId =role.Id,
+                UserRoleId = role.Id,
             };
             await SeedUser(user);
             var command = new LoginUserAccountCommand()
@@ -239,6 +284,7 @@ namespace TravelDiary.ApiTests.Controllers
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
 
+        [Fact]
         public async Task Update_ForValidParams_ReturnsOK()
         {
             // arrange
@@ -268,16 +314,21 @@ namespace TravelDiary.ApiTests.Controllers
                 UserRoleId = role.Id,
             };
             await SeedUser(user);
+            
             var command = new UpdateUserDetailsCommand()
             {
                 FirstName = "John",
-                LastName="Doe",
-                Country="USA"
+                LastName = "Doe",
+                Country = "USA"
             };
             var httpContent = command.ToJsonHttpContent();
+
+            var userToken = GenerateJwtToken(user, role);
+            _userClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userToken);
+
             // act
 
-            var response = await _client.PostAsync($"{_route}/Login", httpContent);
+            var response = await _userClient.PutAsync($"{_route}", httpContent);
             // assert
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);

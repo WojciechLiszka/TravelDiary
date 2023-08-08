@@ -27,11 +27,13 @@ namespace TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetai
             {
                 throw new ItemNotFoundException("Account not found");
             }
+            var userEmail = user.UserDetails.Email;
             user.UserDetails = new Domain.Entities.UserDetails()
             {
                 Country = request.Country,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
+                Email=userEmail
             };
             await _accountRepository.Commit();
         }
