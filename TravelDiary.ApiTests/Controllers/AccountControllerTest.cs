@@ -294,11 +294,6 @@ namespace TravelDiary.ApiTests.Controllers
             };
             await SeedRole(role);
 
-            var validPassword = "password";
-            _passwordHasherMock
-                .Setup(e => e.VerifyHashedPassword(It.IsAny<User>(), It.IsAny<string>(), It.Is<string>(password => password == validPassword)))
-                .Returns(PasswordVerificationResult.Success);
-
             var user = new User()
             {
                 NickName = "JDoe",
@@ -310,11 +305,11 @@ namespace TravelDiary.ApiTests.Controllers
                     LastName = "Doe"
                 },
 
-                PasswordHash = validPassword,
+                PasswordHash = "validPassword",
                 UserRoleId = role.Id,
             };
             await SeedUser(user);
-            
+
             var command = new UpdateUserDetailsCommand()
             {
                 FirstName = "John",
@@ -332,6 +327,55 @@ namespace TravelDiary.ApiTests.Controllers
             // assert
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        }
+
+        [Theory]
+        [InlineData(null, "Doe", "USA")]// firstName is null
+        [InlineData("John", null, "USA")]// lastName is null
+        [InlineData("John", "Doe", null)]// country is null
+        [InlineData(null, null, null)]// all values is null
+        public async Task Update_ForInvalidParams_ReturnsBadRequest(string firstName, string lastName, string country)
+        {
+            // arrange
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(user);
+
+            var command = new UpdateUserDetailsCommand()
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Country = country
+            };
+            var httpContent = command.ToJsonHttpContent();
+
+            var userToken = GenerateJwtToken(user, role);
+            _userClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userToken);
+
+            // act
+
+            var response = await _userClient.PutAsync($"{_route}", httpContent);
+            // assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
     }
 }
