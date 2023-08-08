@@ -191,5 +191,51 @@ namespace TravelDiary.ApiTests.Controllers
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
+
+        [Theory]
+        [InlineData("test@email.com", "inValidpassword")]
+        [InlineData("invalid@email.com", "inValidpassword")]
+        public async Task LoginUser_ForInvalidParams_ReturnsBadRequest(string email, string password)
+        {
+            // arrange
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var validPassword = "password";
+            _passwordHasherMock
+                .Setup(e => e.VerifyHashedPassword(It.IsAny<User>(), It.IsAny<string>(), It.Is<string>(password => password == validPassword)))
+                .Returns(PasswordVerificationResult.Success);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = validPassword,
+                UserRoleId = 1,
+            };
+            await SeedUser(user);
+            var command = new LoginUserAccountCommand()
+            {
+                Email = email,
+                Password = password,
+            };
+            var httpContent = command.ToJsonHttpContent();
+            // act
+
+            var response = await _client.PostAsync($"{_route}/Login", httpContent);
+            // assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        }
     }
 }
