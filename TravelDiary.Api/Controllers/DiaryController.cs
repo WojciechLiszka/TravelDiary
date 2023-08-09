@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelDiary.Application.DiaryService.Commands.CreateDiaryCommand;
 
@@ -16,6 +17,7 @@ namespace TravelDiary.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Create(CreateDiaryCommand command)
         {
             var id = await _mediator.Send(command);

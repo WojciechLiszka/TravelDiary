@@ -8,20 +8,32 @@ namespace TravelDiary.Application.DiaryService.Commands.CreateDiaryCommand
     {
         private readonly IDiaryRepository _diaryRepository;
         private readonly IAccountRepository _userRepository;
+        private readonly IUserContextService _userContextService;
 
-        public CreateDiaryCommandHandler(IDiaryRepository diaryRepository, IAccountRepository userRepository)
+        public CreateDiaryCommandHandler(IDiaryRepository diaryRepository, IAccountRepository userRepository, IUserContextService userContextService)
         {
             _diaryRepository = diaryRepository;
             _userRepository = userRepository;
+            _userContextService = userContextService;
         }
 
         public async Task<string> Handle(CreateDiaryCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.TakeFirst();
+            var userId = _userContextService.GetUserId;
+
+            if (userId == null)
+            {
+                throw new Exception("Invalid User Token");
+            }
+
+            var user = await _userRepository.GetById((Guid)userId);
+
+
             if (user == null)
             {
-                throw new ArgumentNullException(nameof(user));
+                throw new Exception("UserNotFound");
             }
+
             var Diary = new Diary()
             {
                 Name = request.Name,

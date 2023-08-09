@@ -55,8 +55,7 @@ namespace TravelDiary.ApiTests.Controllers
 
                        services
                         .AddDbContext<TravelDiaryDbContext>(options => options.UseInMemoryDatabase("TravelDiaryDb")
-                        .EnableSensitiveDataLogging())
-                        ;
+                        .EnableSensitiveDataLogging());
                    });
                });
 
