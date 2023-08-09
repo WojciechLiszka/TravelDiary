@@ -12,8 +12,8 @@ using TravelDiary.Infrastructure.Persistence;
 namespace TravelDiary.Infrastructure.Migrations
 {
     [DbContext(typeof(TravelDiaryDbContext))]
-    [Migration("20230802134633_Added_Country_Property_To_UserDetails")]
-    partial class Added_Country_Property_To_UserDetails
+    [Migration("20230809202217_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,9 +27,11 @@ namespace TravelDiary.Infrastructure.Migrations
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.Diary", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<Guid>("CreatedById")
                         .HasColumnType("uniqueidentifier");
@@ -71,8 +73,8 @@ namespace TravelDiary.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DiaryId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("DiaryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Tittle")
                         .IsRequired()
@@ -128,12 +130,12 @@ namespace TravelDiary.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int>("UserRoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("UserRoleId");
 
                     b.ToTable("Users");
                 });
@@ -190,9 +192,9 @@ namespace TravelDiary.Infrastructure.Migrations
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.User", b =>
                 {
-                    b.HasOne("TravelDiary.Domain.Entities.UserRole", "Role")
+                    b.HasOne("TravelDiary.Domain.Entities.UserRole", "UserRole")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("UserRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -225,10 +227,10 @@ namespace TravelDiary.Infrastructure.Migrations
                                 .HasForeignKey("UserId");
                         });
 
-                    b.Navigation("Role");
-
                     b.Navigation("UserDetails")
                         .IsRequired();
+
+                    b.Navigation("UserRole");
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.Diary", b =>

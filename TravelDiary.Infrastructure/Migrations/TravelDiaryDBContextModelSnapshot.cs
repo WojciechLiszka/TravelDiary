@@ -11,7 +11,7 @@ using TravelDiary.Infrastructure.Persistence;
 namespace TravelDiary.Infrastructure.Migrations
 {
     [DbContext(typeof(TravelDiaryDbContext))]
-    partial class TravelDiaryDBContextModelSnapshot : ModelSnapshot
+    partial class TravelDiaryDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -24,9 +24,11 @@ namespace TravelDiary.Infrastructure.Migrations
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.Diary", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<Guid>("CreatedById")
                         .HasColumnType("uniqueidentifier");
@@ -68,8 +70,8 @@ namespace TravelDiary.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DiaryId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("DiaryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Tittle")
                         .IsRequired()

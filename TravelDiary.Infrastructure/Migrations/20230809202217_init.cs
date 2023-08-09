@@ -34,14 +34,15 @@ namespace TravelDiary.Infrastructure.Migrations
                     UserDetails_Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserDetails_FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserDetails_LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    UserDetails_Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserRoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Roles_RoleId",
-                        column: x => x.RoleId,
+                        name: "FK_Users_Roles_UserRoleId",
+                        column: x => x.UserRoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -51,7 +52,8 @@ namespace TravelDiary.Infrastructure.Migrations
                 name: "Diaries",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Starts = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Ends = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -78,7 +80,7 @@ namespace TravelDiary.Infrastructure.Migrations
                     Tittle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DiaryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DiaryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,9 +130,9 @@ namespace TravelDiary.Infrastructure.Migrations
                 column: "EntryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RoleId",
+                name: "IX_Users_UserRoleId",
                 table: "Users",
-                column: "RoleId");
+                column: "UserRoleId");
         }
 
         /// <inheritdoc />
