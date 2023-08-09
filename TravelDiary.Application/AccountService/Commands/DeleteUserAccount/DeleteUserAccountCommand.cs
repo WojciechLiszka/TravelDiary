@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace TravelDiary.Application.AccountService.Commands.DeleteUserAccountCommand
+namespace TravelDiary.Application.AccountService.Commands.DeleteUserAccount
 {
     public class DeleteUserAccountCommand : IRequest
     {

@@ -2,7 +2,7 @@
 using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Interfaces;
 
-namespace TravelDiary.Application.DiaryService.Commands.CreateDiaryCommand
+namespace TravelDiary.Application.DiaryService.Commands.CreateDiary
 {
     public class CreateDiaryCommandHandler : IRequestHandler<CreateDiaryCommand, string>
     {

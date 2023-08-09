@@ -2,7 +2,7 @@
 using TravelDiary.Domain.Exceptions;
 using TravelDiary.Domain.Interfaces;
 
-namespace TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetailsCommand
+namespace TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetails
 {
     internal class UpdateUserDetailsCommandHandler : IRequestHandler<UpdateUserDetailsCommand>
     {
@@ -33,7 +33,7 @@ namespace TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetai
                 Country = request.Country,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                Email=userEmail
+                Email = userEmail
             };
             await _accountRepository.Commit();
         }
