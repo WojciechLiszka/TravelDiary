@@ -39,7 +39,7 @@ namespace TravelDiary.Application.DiaryService.Commands.UpdateDiaryDescription
             }
 
             var user = _accountRepository.GetById((Guid)userId);
-            var authorizationResult = await _authorization.AuthorizeAsync(_userContextService.User, diary, new DiaryResourceOperationRequirement(ResourceOperation.Delete));
+            var authorizationResult = await _authorization.AuthorizeAsync(_userContextService.User, diary, new DiaryResourceOperationRequirement(ResourceOperation.Update));
             if (!authorizationResult.Succeeded)
             {
                 throw new ForbiddenException();
