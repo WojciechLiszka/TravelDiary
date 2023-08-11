@@ -11,9 +11,9 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using TravelDiary.ApiTests.Helpers;
-using TravelDiary.Application.AccountService.Commands.LoginUserAccountCommand;
-using TravelDiary.Application.AccountService.Commands.RegisterUserAccountCommand;
-using TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetailsCommand;
+using TravelDiary.Application.AccountService.Commands.LoginUserAccount;
+using TravelDiary.Application.AccountService.Commands.RegisterUserAccount;
+using TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetails;
 using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Interfaces;
 using TravelDiary.Domain.Models;
@@ -460,6 +460,7 @@ namespace TravelDiary.ApiTests.Controllers
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
         }
+
         [Fact]
         public async Task Delete_ForInvalidPassword_ReturnsBadRequest()
         {

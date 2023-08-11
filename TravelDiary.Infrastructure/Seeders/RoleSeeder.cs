@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Data;
 using TravelDiary.Domain.Entities;
 using TravelDiary.Infrastructure.Persistence;
 
@@ -13,7 +12,9 @@ namespace TravelDiary.Infrastructure.Seeders
         public RoleSeeder(TravelDiaryDbContext dbContext)
         {
             _dbContext = dbContext;
+            _roles = GetRoles().ToList();
         }
+
         public async Task Seed()
         {
             if (_dbContext.Database.CanConnect() && _dbContext.Database.IsRelational())
@@ -33,7 +34,8 @@ namespace TravelDiary.Infrastructure.Seeders
 
         private IEnumerable<UserRole> GetRoles()
         {
-            var roles = new List<UserRole>() {
+            var roles = new List<UserRole>()
+            {
                 new UserRole()
                 {
                     RoleName = "User"
@@ -43,7 +45,7 @@ namespace TravelDiary.Infrastructure.Seeders
                 {
                     RoleName = "Admin"
                 }
-                };
+            };
 
             return roles;
         }

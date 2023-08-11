@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TravelDiary.Application.AccountService.Commands.DeleteUserAccountCommand;
-using TravelDiary.Application.AccountService.Commands.LoginUserAccountCommand;
-using TravelDiary.Application.AccountService.Commands.RegisterUserAccountCommand;
-using TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetailsCommand;
+using TravelDiary.Application.AccountService.Commands.DeleteUserAccount;
+using TravelDiary.Application.AccountService.Commands.LoginUserAccount;
+using TravelDiary.Application.AccountService.Commands.RegisterUserAccount;
+using TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetails;
 
 namespace TravelDiary.Api.Controllers
 {
@@ -47,7 +47,7 @@ namespace TravelDiary.Api.Controllers
             {
                 Password = password
             };
-       
+
             await _mediator.Send(command);
             return NoContent();
         }

@@ -6,6 +6,6 @@ namespace TravelDiary.Domain.Interfaces
     {
         Task Create(Diary diary);
 
-        Task<Diary?> GetDiaryById(int id);
+        Task<Diary?> GetById(int id);
     }
 }
