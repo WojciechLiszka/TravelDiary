@@ -27,7 +27,6 @@ namespace TravelDiary.ApiTests.Controllers
         private readonly HttpClient _client;
         private readonly WebApplicationFactory<Program> _factory;
         private readonly AuthenticationSettings _authenticationSettings;
-        private readonly Mock<IUserRoleRepository> _userRoleRepositoryMock = new Mock<IUserRoleRepository>();
         private readonly Mock<IPasswordHasher<User>> _passwordHasherMock = new Mock<IPasswordHasher<User>>();
         private readonly IConfiguration _configuration;
         private HttpClient _userClient;
