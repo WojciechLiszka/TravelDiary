@@ -36,11 +36,16 @@ namespace TravelDiary.Api.Controllers
                 Id = diaryId,
                 Description = description
             };
-            if (!ModelState.IsValid)
+
+            var validator = new UpdateDiaryDescriptionCommandValidator();
+
+            var validationResult = await validator.ValidateAsync(Command);
+            if (!validationResult.IsValid)
             {
                 return BadRequest();
             }
             await _mediator.Send(Command);
+
             return Ok();
         }
 

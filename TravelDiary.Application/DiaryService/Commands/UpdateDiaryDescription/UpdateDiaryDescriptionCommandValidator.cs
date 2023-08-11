@@ -7,6 +7,8 @@ namespace TravelDiary.Application.DiaryService.Commands.UpdateDiaryDescription
         public UpdateDiaryDescriptionCommandValidator()
         {
             RuleFor(x => x.Description)
+                .NotEmpty()
+                .NotNull()
                 .MinimumLength(1)
                 .MaximumLength(500);
         }
