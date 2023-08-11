@@ -104,6 +104,18 @@ namespace TravelDiary.ApiTests.Controllers
             }
         }
 
+        private async Task SeedDiary(Diary diary)
+        {
+            var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
+            using var scope = scopeFactory.CreateScope();
+            var _dbContext = scope.ServiceProvider.GetService<TravelDiaryDbContext>();
+            if (!_dbContext.Diaries.Contains(diary))
+            {
+                _dbContext.Diaries.Add(diary);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
         private async Task PrepareUserClient(User user, UserRole role)
         {
             var userToken = GenerateJwtToken(user, role);
@@ -151,15 +163,16 @@ namespace TravelDiary.ApiTests.Controllers
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
+
         [Theory]
         [InlineData(null, "ValidDescription", "2023 - 08 - 11T12: 00:00", PrivacyPolicy.Public)] // Null name
         [InlineData("", "ValidDescription", "2023 - 08 - 11T12: 00:00", PrivacyPolicy.Public)] // Empty name
         [InlineData("ValidName", null, "2023 - 08 - 11T12: 00:00", PrivacyPolicy.Public)] // Null description
         [InlineData("ValidName", "", "2023 - 08 - 11T12: 00:00", PrivacyPolicy.Public)] // Empty description
         [InlineData("N", "ValidDescription", "2023 - 08 - 11T12: 00:00", PrivacyPolicy.Public)] // Name To short
-        [InlineData("VeryLongNameThatExceedsMaxLengthVeryLongNameThatExceedsMaxLengthVeryLongNameThatExceedsMaxLength", "ValidDescription", "2023 - 08 - 11T12: 00:00", PrivacyPolicy.Public)] // Name to long 
+        [InlineData("VeryLongNameThatExceedsMaxLengthVeryLongNameThatExceedsMaxLengthVeryLongNameThatExceedsMaxLength", "ValidDescription", "2023 - 08 - 11T12: 00:00", PrivacyPolicy.Public)] // Name to long
         [InlineData("ValidName", "VeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLengthVeryLongDescriptionThatExceedsMaxLength", "2023 - 08 - 11T12: 00:00", PrivacyPolicy.Public)] // Description To long
-        public async Task Create_ForInvalidParams_ReturnsBadRequest(string name,string description,DateTime starts, PrivacyPolicy privacyPolicy)
+        public async Task Create_ForInvalidParams_ReturnsBadRequest(string name, string description, DateTime starts, PrivacyPolicy privacyPolicy)
         {
             // arrange
             var role = new UserRole()
@@ -198,6 +211,49 @@ namespace TravelDiary.ApiTests.Controllers
             //assert
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task Delete_ForValidId_ReturnsNoContent()
+        {
+            // arrange
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(user);
+            await PrepareUserClient(user, role);
+            var diary = new Diary()
+            {
+                CreatedById = user.Id,
+                Description = "Description",
+                Name = "Name",
+                Starts = new DateTime(2008, 5, 1, 8, 30, 0),
+                Ends = new DateTime(2009, 5, 1, 8, 30, 0)
+            };
+            await SeedDiary(diary);
+            //act
+
+            var response = await _userClient.DeleteAsync($"{_route}/{diary.Id}");
+            //assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
         }
     }
 }
