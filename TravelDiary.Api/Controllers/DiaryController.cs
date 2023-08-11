@@ -53,6 +53,7 @@ namespace TravelDiary.Api.Controllers
             {
                 Id = diaryId
             };
+            await _mediator.Send(Command);
             return NoContent();
         }
     }
