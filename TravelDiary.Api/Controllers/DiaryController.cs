@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelDiary.Application.DiaryService.Commands.CreateDiary;
+using TravelDiary.Application.DiaryService.Commands.DeleteDiary;
 using TravelDiary.Application.DiaryService.Commands.UpdateDiaryDescription;
 
 namespace TravelDiary.Api.Controllers
@@ -27,7 +28,7 @@ namespace TravelDiary.Api.Controllers
 
         [HttpPut]
         [Authorize]
-        [Route("{diaryId}/Descryption")]
+        [Route("{diaryId}/Description")]
         public async Task<ActionResult> UpdateDescription([FromRoute] int diaryId, [FromBody] string description)
         {
             var Command = new UpdateDiaryDescriptionCommand()
@@ -41,6 +42,18 @@ namespace TravelDiary.Api.Controllers
             }
             await _mediator.Send(Command);
             return Ok();
+        }
+
+        [HttpDelete]
+        [Authorize]
+        [Route("{diaryId}")]
+        public async Task<ActionResult> DeleteDiary([FromRoute] int diaryId)
+        {
+            var Command = new DeleteDiaryCommand()
+            {
+                Id = diaryId
+            };
+            return NoContent();
         }
     }
 }

@@ -5,16 +5,16 @@ using TravelDiary.Domain.Exceptions;
 using TravelDiary.Domain.Interfaces;
 using TravelDiary.Domain.Models;
 
-namespace TravelDiary.Application.DiaryService.Commands.UpdateDiaryDescription
+namespace TravelDiary.Application.DiaryService.Commands.DeleteDiary
 {
-    public class UpdateDiaryDescriptionCommandHandler : IRequestHandler<UpdateDiaryDescriptionCommand>
+    public class DeleteDiaryCommandHandler : IRequestHandler<DeleteDiaryCommand>
     {
         private readonly IUserContextService _userContextService;
         private readonly IDiaryRepository _diaryRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IAuthorizationService _authorization;
 
-        public UpdateDiaryDescriptionCommandHandler(IUserContextService userContextService, IDiaryRepository diaryRepository, IAccountRepository accountRepository, IAuthorizationService authorization)
+        public DeleteDiaryCommandHandler(IUserContextService userContextService, IDiaryRepository diaryRepository, IAccountRepository accountRepository, IAuthorizationService authorization)
         {
             _userContextService = userContextService;
             _diaryRepository = diaryRepository;
@@ -22,7 +22,7 @@ namespace TravelDiary.Application.DiaryService.Commands.UpdateDiaryDescription
             _authorization = authorization;
         }
 
-        public async Task Handle(UpdateDiaryDescriptionCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteDiaryCommand request, CancellationToken cancellationToken)
         {
             var diary = await _diaryRepository.GetById(request.Id);
 
@@ -30,13 +30,12 @@ namespace TravelDiary.Application.DiaryService.Commands.UpdateDiaryDescription
             {
                 throw new ItemNotFoundException("Diary Not Found");
             }
-
-            var authorizationResult = await _authorization.AuthorizeAsync(_userContextService.User, diary, new DiaryResourceOperationRequirement(ResourceOperation.Update));
+            var authorizationResult = await _authorization.AuthorizeAsync(_userContextService.User, diary, new DiaryResourceOperationRequirement(ResourceOperation.Delete));
             if (!authorizationResult.Succeeded)
             {
                 throw new ForbiddenException();
             }
-            diary.Description = request.Description;
+            await _diaryRepository.Delete(diary);
         }
     }
 }

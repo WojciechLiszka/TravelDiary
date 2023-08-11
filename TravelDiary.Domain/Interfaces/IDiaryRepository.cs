@@ -7,5 +7,7 @@ namespace TravelDiary.Domain.Interfaces
         Task Create(Diary diary);
 
         Task<Diary?> GetById(int id);
+
+        Task Delete(Diary diary);
     }
 }

@@ -20,6 +20,12 @@ namespace TravelDiary.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task Delete(Diary diary)
+        {
+            _dbContext?.Remove(diary);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<Diary?> GetById(int id)
         {
             return await _dbContext.Diaries.FirstOrDefaultAsync(d => d.Id == id);
