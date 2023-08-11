@@ -505,5 +505,65 @@ namespace TravelDiary.ApiTests.Controllers
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
+        [Fact]
+        public async Task Update_ForNotDiaryOwner_ReturnsForbidden()
+        {
+            // arrange
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(user);
+            var invaliduser = new User()
+            {
+                NickName = "FakeJDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "Faketest@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(invaliduser);
+            await PrepareUserClient(invaliduser, role);
+            var diary = new Diary()
+            {
+                CreatedById = user.Id,
+                Description = "Description",
+                Name = "Name",
+                Starts = new DateTime(2008, 5, 1, 8, 30, 0),
+                Ends = new DateTime(2009, 5, 1, 8, 30, 0)
+            };
+            await SeedDiary(diary);
+            var description = "NewDescription";
+
+            var httpContent = description.ToJsonHttpContent();
+            //act
+
+            var response = await _userClient.PutAsync($"{_route}/{diary.Id}/Description", httpContent);
+            //assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+        }
     }
 }
