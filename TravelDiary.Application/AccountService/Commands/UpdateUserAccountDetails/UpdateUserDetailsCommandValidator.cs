@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetailsCommand
+namespace TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetails
 {
     public class UpdateUserDetailsCommandValidator : AbstractValidator<UpdateUserDetailsCommand>
     {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetailsCommand
+namespace TravelDiary.Application.AccountService.Commands.UpdateUserAccountDetails
 {
     public class UpdateUserDetailsCommand : IRequest
     {

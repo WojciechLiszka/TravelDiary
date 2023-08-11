@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
-using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
+using TravelDiary.Application.Authorization;
 using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Models;
 
@@ -44,6 +45,8 @@ namespace TravelDiary.Application.Extensions
             });
 
             services.AddAuthorization();
+
+            services.AddScoped<IAuthorizationHandler, DiaryResourceOperationRequirementHandler>();
         }
     }
 }

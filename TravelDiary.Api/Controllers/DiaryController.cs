@@ -1,6 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TravelDiary.Application.DiaryService.Commands.CreateDiaryCommand;
+using TravelDiary.Application.DiaryService.Commands.CreateDiary;
+using TravelDiary.Application.DiaryService.Commands.DeleteDiary;
+using TravelDiary.Application.DiaryService.Commands.UpdateDiaryDescription;
 
 namespace TravelDiary.Api.Controllers
 {
@@ -16,10 +19,47 @@ namespace TravelDiary.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Create(CreateDiaryCommand command)
         {
             var id = await _mediator.Send(command);
-            return Ok(id);
+            return Ok($"/Api/Diary/{id}");
+        }
+
+        [HttpPut]
+        [Authorize]
+        [Route("{diaryId}/Description")]
+        public async Task<ActionResult> UpdateDescription([FromRoute] int diaryId, [FromBody] string description)
+        {
+            var Command = new UpdateDiaryDescriptionCommand()
+            {
+                Id = diaryId,
+                Description = description
+            };
+
+            var validator = new UpdateDiaryDescriptionCommandValidator();
+
+            var validationResult = await validator.ValidateAsync(Command);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest();
+            }
+            await _mediator.Send(Command);
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Authorize]
+        [Route("{diaryId}")]
+        public async Task<ActionResult> DeleteDiary([FromRoute] int diaryId)
+        {
+            var Command = new DeleteDiaryCommand()
+            {
+                Id = diaryId
+            };
+            await _mediator.Send(Command);
+            return NoContent();
         }
     }
 }

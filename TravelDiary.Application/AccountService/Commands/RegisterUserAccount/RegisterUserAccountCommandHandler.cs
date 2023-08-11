@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Interfaces;
 
-namespace TravelDiary.Application.AccountService.Commands.RegisterUserAccountCommand
+namespace TravelDiary.Application.AccountService.Commands.RegisterUserAccount
 {
     public class RegisterUserAccountCommandHandler : IRequestHandler<RegisterUserAccountCommand>
     {

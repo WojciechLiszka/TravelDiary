@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using TravelDiary.Domain.Interfaces;
 
-namespace TravelDiary.Application.AccountService.Commands.RegisterUserAccountCommand
+namespace TravelDiary.Application.AccountService.Commands.RegisterUserAccount
 {
     public class RegisterUserCommandValidaTor : AbstractValidator<RegisterUserAccountCommand>
     {

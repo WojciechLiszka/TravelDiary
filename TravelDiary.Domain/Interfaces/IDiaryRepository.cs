@@ -5,5 +5,9 @@ namespace TravelDiary.Domain.Interfaces
     public interface IDiaryRepository
     {
         Task Create(Diary diary);
+
+        Task<Diary?> GetById(int id);
+
+        Task Delete(Diary diary);
     }
 }

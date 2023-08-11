@@ -1,4 +1,5 @@
-﻿using TravelDiary.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Interfaces;
 using TravelDiary.Infrastructure.Persistence;
 
@@ -17,6 +18,17 @@ namespace TravelDiary.Infrastructure.Repositories
         {
             _dbContext.Add(diary);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task Delete(Diary diary)
+        {
+            _dbContext?.Remove(diary);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<Diary?> GetById(int id)
+        {
+            return await _dbContext.Diaries.FirstOrDefaultAsync(d => d.Id == id);
         }
     }
 }

@@ -4,7 +4,7 @@ using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Exceptions;
 using TravelDiary.Domain.Interfaces;
 
-namespace TravelDiary.Application.AccountService.Commands.DeleteUserAccountCommand
+namespace TravelDiary.Application.AccountService.Commands.DeleteUserAccount
 {
     public class DeleteUserAccountCommandHandler : IRequestHandler<DeleteUserAccountCommand>
     {

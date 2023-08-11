@@ -2,7 +2,7 @@
 {
     public class Diary
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = null!;
         public DateTime Starts { get; set; }
         public DateTime Ends { get; set; }

@@ -9,7 +9,7 @@ using TravelDiary.Domain.Exceptions;
 using TravelDiary.Domain.Interfaces;
 using TravelDiary.Domain.Models;
 
-namespace TravelDiary.Application.AccountService.Commands.LoginUserAccountCommand
+namespace TravelDiary.Application.AccountService.Commands.LoginUserAccount
 {
     public class LoginUserAccountCommandHandler : IRequestHandler<LoginUserAccountCommand, string>
     {
