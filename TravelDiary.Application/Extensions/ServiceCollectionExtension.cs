@@ -8,6 +8,7 @@ using System.Reflection;
 using TravelDiary.Application.Authorization;
 using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Models;
+using Mapster;
 
 namespace TravelDiary.Application.Extensions
 {
@@ -47,6 +48,10 @@ namespace TravelDiary.Application.Extensions
             services.AddAuthorization();
 
             services.AddScoped<IAuthorizationHandler, DiaryResourceOperationRequirementHandler>();
+
+            var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
+            
+            typeAdapterConfig.Scan(Assembly.GetExecutingAssembly());
         }
     }
 }

@@ -13,7 +13,7 @@ namespace TravelDiary.Application.Authorization
             {
                 context.Succeed(requirement);
             }
-
+            
             var userId = Guid.Parse(context.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
             var userRole = context.User.FindFirst(c => c.Type == ClaimTypes.Role).Value;
 

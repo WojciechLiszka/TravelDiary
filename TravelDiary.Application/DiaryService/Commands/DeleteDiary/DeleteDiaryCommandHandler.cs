@@ -11,14 +11,12 @@ namespace TravelDiary.Application.DiaryService.Commands.DeleteDiary
     {
         private readonly IUserContextService _userContextService;
         private readonly IDiaryRepository _diaryRepository;
-        private readonly IAccountRepository _accountRepository;
         private readonly IAuthorizationService _authorization;
 
-        public DeleteDiaryCommandHandler(IUserContextService userContextService, IDiaryRepository diaryRepository, IAccountRepository accountRepository, IAuthorizationService authorization)
+        public DeleteDiaryCommandHandler(IUserContextService userContextService, IDiaryRepository diaryRepository, IAuthorizationService authorization)
         {
             _userContextService = userContextService;
             _diaryRepository = diaryRepository;
-            _accountRepository = accountRepository;
             _authorization = authorization;
         }
 

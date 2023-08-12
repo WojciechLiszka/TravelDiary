@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using TravelDiary.Application.DiaryService.Commands.CreateDiary;
 using TravelDiary.Application.DiaryService.Commands.DeleteDiary;
 using TravelDiary.Application.DiaryService.Commands.UpdateDiaryDescription;
+using TravelDiary.Application.DiaryService.Queries.GetById;
+using TravelDiary.Domain.Dtos;
 
 namespace TravelDiary.Api.Controllers
 {
@@ -60,6 +62,19 @@ namespace TravelDiary.Api.Controllers
             };
             await _mediator.Send(Command);
             return NoContent();
+        }
+
+        [HttpGet]
+        [Route("{diaryId}")]
+        public async Task<ActionResult<GetDiaryDto>> GetById([FromRoute] int diaryid)
+        {
+            var query = new GetDiaryByIdQuery()
+            {
+                Id = diaryid
+            };
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
         }
     }
 }
