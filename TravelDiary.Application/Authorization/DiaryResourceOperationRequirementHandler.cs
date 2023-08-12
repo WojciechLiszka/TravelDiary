@@ -13,9 +13,9 @@ namespace TravelDiary.Application.Authorization
             {
                 context.Succeed(requirement);
             }
-            if(!context.User.Claims.Any())
+            if (!context.User.Claims.Any()) // check for unauthorized user
             {
-                if ( resource.Policy is PrivacyPolicy.Public && requirement.Operation is ResourceOperation.Read)
+                if (resource.Policy is PrivacyPolicy.Public && requirement.Operation is ResourceOperation.Read)
                 {
                     context.Succeed(requirement);
                 }
