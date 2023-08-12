@@ -2,8 +2,10 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using TravelDiary.Application.Authorization;
 using TravelDiary.Domain.Dtos;
+using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Exceptions;
 using TravelDiary.Domain.Interfaces;
 
@@ -32,7 +34,7 @@ namespace TravelDiary.Application.DiaryService.Queries.GetById
                 throw new ItemNotFoundException("DiaryNotFound");
             }
 
-            var authorizationResult = await _authorizationService.AuthorizeAsync(_userContextService.User, diary, new DiaryResourceOperationRequirement(Domain.Models.ResourceOperation.Read));
+                var authorizationResult = await _authorizationService.AuthorizeAsync(_userContextService.User, diary, new DiaryResourceOperationRequirement(Domain.Models.ResourceOperation.Read));
 
             if (!authorizationResult.Succeeded)
             {

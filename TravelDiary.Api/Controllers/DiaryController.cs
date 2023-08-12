@@ -66,11 +66,11 @@ namespace TravelDiary.Api.Controllers
 
         [HttpGet]
         [Route("{diaryId}")]
-        public async Task<ActionResult<GetDiaryDto>> GetById([FromRoute] int diaryid)
+        public async Task<ActionResult<GetDiaryDto>> GetById([FromRoute] int diaryId)
         {
             var query = new GetDiaryByIdQuery()
             {
-                Id = diaryid
+                Id = diaryId
             };
             var result = await _mediator.Send(query);
 
