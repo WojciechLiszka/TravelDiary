@@ -454,6 +454,7 @@ namespace TravelDiary.ApiTests.Controllers
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
         }
+
         [Theory]
         [InlineData("")] // Empty description
         [InlineData(null)] // Null description
@@ -505,6 +506,7 @@ namespace TravelDiary.ApiTests.Controllers
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
+
         [Fact]
         public async Task Update_ForNotDiaryOwner_ReturnsForbidden()
         {
@@ -564,6 +566,50 @@ namespace TravelDiary.ApiTests.Controllers
             //assert
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+        }
+
+        [Fact]
+        public async Task GetDiary_ForValidId_ReturnsOk()
+        {
+            // arrange
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(user);
+
+            var diary = new Diary()
+            {
+                CreatedById = user.Id,
+                Description = "Description",
+                Name = "Name",
+                Starts = new DateTime(2008, 5, 1, 8, 30, 0),
+                Ends = new DateTime(2009, 5, 1, 8, 30, 0),
+                Policy = PrivacyPolicy.Public,
+            };
+            await SeedDiary(diary);
+            // act
+
+            var response = await _client.GetAsync($"{_route}/{diary.Id}");
+            // assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
     }
 }

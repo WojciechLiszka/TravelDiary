@@ -17,13 +17,13 @@ namespace TravelDiary.Application.DiaryService.Queries.GetDiaries
     {
         private readonly IDiaryRepository _diaryRepository;
         private readonly IUserContextService _userContextService;
-        private readonly IAuthorizationService _authorizationService;
+ 
 
-        public GetDiariesQueryHandler(IDiaryRepository diaryRepository, IUserContextService userContextService, IAuthorizationService authorizationService)
+        public GetDiariesQueryHandler(IDiaryRepository diaryRepository, IUserContextService userContextService)
         {
             _diaryRepository = diaryRepository;
             _userContextService = userContextService;
-            _authorizationService = authorizationService;
+        
         }
 
         public async Task<PagedResult<GetDiaryDto>> Handle(GetDiariesQuery request, CancellationToken cancellationToken)
