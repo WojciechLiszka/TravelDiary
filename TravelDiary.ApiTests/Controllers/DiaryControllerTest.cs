@@ -613,7 +613,7 @@ namespace TravelDiary.ApiTests.Controllers
         }
 
         [Fact]
-        public async Task GetDiary_ForInvalidId_ReturnsNotFound()
+        public async Task GetDiarybyId_ForInvalidId_ReturnsNotFound()
         {
             // arrange
             var role = new UserRole()
@@ -657,7 +657,7 @@ namespace TravelDiary.ApiTests.Controllers
         }
 
         [Fact]
-        public async Task GetDiary_ForNotDiaryOvner_ReturnsForbidden()
+        public async Task GetDiarybyId_ForNotDiaryOwner_ReturnsForbidden()
         {
             // arrange
             var role = new UserRole()
@@ -714,6 +714,8 @@ namespace TravelDiary.ApiTests.Controllers
             // assert
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+
+
         }
     }
 }
