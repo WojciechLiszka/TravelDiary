@@ -5,7 +5,9 @@ using TravelDiary.Application.DiaryService.Commands.CreateDiary;
 using TravelDiary.Application.DiaryService.Commands.DeleteDiary;
 using TravelDiary.Application.DiaryService.Commands.UpdateDiaryDescription;
 using TravelDiary.Application.DiaryService.Queries.GetById;
+using TravelDiary.Application.DiaryService.Queries.GetDiaries;
 using TravelDiary.Domain.Dtos;
+using TravelDiary.Domain.Models;
 
 namespace TravelDiary.Api.Controllers
 {
@@ -74,6 +76,14 @@ namespace TravelDiary.Api.Controllers
             };
             var result = await _mediator.Send(query);
 
+            return Ok(result);
+        }
+        [HttpGet]
+
+        public async Task<ActionResult<PagedResult<GetDiaryDto>>> GetDiaries([FromQuery] GetDiariesQuery query)
+        {
+
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
     }

@@ -9,5 +9,7 @@ namespace TravelDiary.Domain.Interfaces
         Task<Diary?> GetById(int id);
 
         Task Delete(Diary diary);
+
+        IQueryable<Diary> Search(string phrase);
     }
 }
