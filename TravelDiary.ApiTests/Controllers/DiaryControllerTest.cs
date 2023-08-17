@@ -454,6 +454,7 @@ namespace TravelDiary.ApiTests.Controllers
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
         }
+
         [Theory]
         [InlineData("")] // Empty description
         [InlineData(null)] // Null description
@@ -505,6 +506,7 @@ namespace TravelDiary.ApiTests.Controllers
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
+
         [Fact]
         public async Task Update_ForNotDiaryOwner_ReturnsForbidden()
         {
@@ -564,6 +566,186 @@ namespace TravelDiary.ApiTests.Controllers
             //assert
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+        }
+
+        [Fact]
+        public async Task GetDiary_ForValidId_ReturnsOk()
+        {
+            // arrange
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(user);
+
+            var diary = new Diary()
+            {
+                CreatedById = user.Id,
+                Description = "Description",
+                Name = "Name",
+                Starts = new DateTime(2008, 5, 1, 8, 30, 0),
+                Ends = new DateTime(2009, 5, 1, 8, 30, 0),
+                Policy = PrivacyPolicy.Public,
+            };
+            await SeedDiary(diary);
+            // act
+
+            var response = await _client.GetAsync($"{_route}/{diary.Id}");
+            // assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async Task GetDiaryById_ForInvalidId_ReturnsNotFound()
+        {
+            // arrange
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(user);
+
+            var diary = new Diary()
+            {
+                CreatedById = user.Id,
+                Description = "Description",
+                Name = "Name",
+                Starts = new DateTime(2008, 5, 1, 8, 30, 0),
+                Ends = new DateTime(2009, 5, 1, 8, 30, 0),
+                Policy = PrivacyPolicy.Public,
+            };
+            await SeedDiary(diary);
+            // act
+
+            var response = await _client.GetAsync($"{_route}/3456");
+            // assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task GetDiaryById_ForNotDiaryOwner_ReturnsForbidden()
+        {
+            // arrange
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(user);
+
+            var diary = new Diary()
+            {
+                CreatedById = user.Id,
+                Description = "Description",
+                Name = "Name",
+                Starts = new DateTime(2008, 5, 1, 8, 30, 0),
+                Ends = new DateTime(2009, 5, 1, 8, 30, 0),
+                Policy = PrivacyPolicy.Private,
+            };
+            await SeedDiary(diary);
+            var invaliduser = new User()
+            {
+                NickName = "FakeJDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "Faketest@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(invaliduser);
+            await PrepareUserClient(invaliduser, role);
+            // act
+
+            var response = await _userClient.GetAsync($"{_route}/{diary.Id}");
+            // assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+        }
+
+        [Fact]
+        public async Task GetDiaries_ForValidQueryParams_ReturnsOk()
+        {
+            //arrange
+
+            var query = "PageNumber=1&PageSize=5&SearchPhrase=phrase&SortBy=Starts&SortDirection=0";
+            //act
+
+            var response = await _client.GetAsync($"{_route}?{query}");
+            //assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        }
+        [Theory]
+        [InlineData(-1, 10, "sample", "Name", SortDirection.ASC)] // Negative page number
+        [InlineData(1, 7, "sample", "Name", SortDirection.ASC)]  // Invalid page size
+        [InlineData(1, 10, "sample", "invalidColumn", SortDirection.ASC)]  // Invalid sorting column
+        [InlineData(0, -5, null, "title", SortDirection.DESC)]  // Combination of negative values
+        [InlineData(1, -10, "sample", "date", SortDirection.ASC)] // Negative page size
+        public async Task GetDiaries_ForInvalidQueryParams_ReturnsBadRequest(int pageNumber,int pageSize,string searchPhrase,string sortBy,SortDirection sortDirection)
+        {
+            //arrange
+
+            var query = $"PageNumber={pageNumber}&PageSize={pageSize}&SearchPhrase={searchPhrase}&SortBy={sortBy}&SortDirection={sortDirection}";
+            //act
+
+            var response = await _client.GetAsync($"{_route}?{query}");
+            //assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

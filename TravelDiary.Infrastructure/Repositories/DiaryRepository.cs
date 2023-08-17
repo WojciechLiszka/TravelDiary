@@ -30,5 +30,16 @@ namespace TravelDiary.Infrastructure.Repositories
         {
             return await _dbContext.Diaries.FirstOrDefaultAsync(d => d.Id == id);
         }
+
+        public IQueryable<Diary> Search(string phrase)
+        {
+            var diaries = _dbContext
+              .Diaries
+              .Where(b => phrase == null
+              || b.Name.ToLower().Contains(phrase.ToLower())
+              || b.Description.ToLower().Contains(phrase.ToLower()))
+              .Where(d => d.Policy == PrivacyPolicy.Public);
+            return diaries;
+        }
     }
 }
