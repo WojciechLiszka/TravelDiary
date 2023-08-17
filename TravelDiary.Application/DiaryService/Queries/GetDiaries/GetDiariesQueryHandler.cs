@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
 using System.Security.Claims;
@@ -41,10 +42,10 @@ namespace TravelDiary.Application.DiaryService.Queries.GetDiaries
                    ? baseQuery.OrderBy(selectedColumn)
                    : baseQuery.OrderByDescending(selectedColumn);
             }
-            var diaries = baseQuery
+            var diaries = await baseQuery
                 .Skip(request.PageSize * (request.PageNumber - 1))
                 .Take(request.PageSize)
-                .ToList();
+                .ToListAsync();
 
             var totalItemsCount = baseQuery.Count();
             var dtos = diaries.Adapt<List<GetDiaryDto>>();
