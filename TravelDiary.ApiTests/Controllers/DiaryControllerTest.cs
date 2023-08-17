@@ -613,7 +613,7 @@ namespace TravelDiary.ApiTests.Controllers
         }
 
         [Fact]
-        public async Task GetDiarybyId_ForInvalidId_ReturnsNotFound()
+        public async Task GetDiaryById_ForInvalidId_ReturnsNotFound()
         {
             // arrange
             var role = new UserRole()
@@ -657,7 +657,7 @@ namespace TravelDiary.ApiTests.Controllers
         }
 
         [Fact]
-        public async Task GetDiarybyId_ForNotDiaryOwner_ReturnsForbidden()
+        public async Task GetDiaryById_ForNotDiaryOwner_ReturnsForbidden()
         {
             // arrange
             var role = new UserRole()
@@ -714,8 +714,38 @@ namespace TravelDiary.ApiTests.Controllers
             // assert
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+        }
 
+        [Fact]
+        public async Task GetDiaries_ForValidQueryParams_ReturnsOk()
+        {
+            //arrange
 
+            var query = "PageNumber=1&PageSize=5&SearchPhrase=phrase&SortBy=Starts&SortDirection=0";
+            //act
+
+            var response = await _client.GetAsync($"{_route}?{query}");
+            //assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        }
+        [Theory]
+        [InlineData(-1, 10, "sample", "Name", SortDirection.ASC)] // Negative page number
+        [InlineData(1, 7, "sample", "Name", SortDirection.ASC)]  // Invalid page size
+        [InlineData(1, 10, "sample", "invalidColumn", SortDirection.ASC)]  // Invalid sorting column
+        [InlineData(0, -5, null, "title", SortDirection.DESC)]  // Combination of negative values
+        [InlineData(1, -10, "sample", "date", SortDirection.ASC)] // Negative page size
+        public async Task GetDiaries_ForInvalidQueryParams_ReturnsBadRequest(int pageNumber,int pageSize,string searchPhrase,string sortBy,SortDirection sortDirection)
+        {
+            //arrange
+
+            var query = $"PageNumber={pageNumber}&PageSize={pageSize}&SearchPhrase={searchPhrase}&SortBy={sortBy}&SortDirection={sortDirection}";
+            //act
+
+            var response = await _client.GetAsync($"{_route}?{query}");
+            //assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

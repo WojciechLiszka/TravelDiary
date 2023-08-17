@@ -1,11 +1,8 @@
 ﻿using Mapster;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
-using System.Security.Claims;
-using TravelDiary.Application.Authorization;
 using TravelDiary.Domain.Dtos;
 using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Interfaces;
@@ -17,13 +14,11 @@ namespace TravelDiary.Application.DiaryService.Queries.GetDiaries
     {
         private readonly IDiaryRepository _diaryRepository;
         private readonly IUserContextService _userContextService;
- 
 
         public GetDiariesQueryHandler(IDiaryRepository diaryRepository, IUserContextService userContextService)
         {
             _diaryRepository = diaryRepository;
             _userContextService = userContextService;
-        
         }
 
         public async Task<PagedResult<GetDiaryDto>> Handle(GetDiariesQuery request, CancellationToken cancellationToken)
@@ -35,6 +30,8 @@ namespace TravelDiary.Application.DiaryService.Queries.GetDiaries
                 {
                     { nameof(Diary.Name), b => b.Name },
                     { nameof(Diary.Description), b => b.Description },
+                    { nameof(Diary.Starts), b => b.Starts },
+                    { nameof(Diary.Ends), b => b.Ends },
                 };
                 var selectedColumn = columnsSelectors[request.SortBy];
 
