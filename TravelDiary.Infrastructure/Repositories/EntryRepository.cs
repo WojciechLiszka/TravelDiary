@@ -1,4 +1,5 @@
-﻿using TravelDiary.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Interfaces;
 using TravelDiary.Infrastructure.Persistence;
 
@@ -17,6 +18,12 @@ namespace TravelDiary.Infrastructure.Repositories
         {
             _dbContext.Entries.Add(entry);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<Entry?> GetById(int id)
+        {
+            var entry = await _dbContext.Entries.FirstOrDefaultAsync();
+            return entry;
         }
     }
 }
