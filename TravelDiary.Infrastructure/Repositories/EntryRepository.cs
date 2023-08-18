@@ -1,18 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TravelDiary.Domain.Entities;
+﻿using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Interfaces;
+using TravelDiary.Infrastructure.Persistence;
 
 namespace TravelDiary.Infrastructure.Repositories
 {
     internal class EntryRepository : IEntryRepository
     {
-        public Task Create(Entry entry)
+        private readonly TravelDiaryDbContext _dbContext;
+
+        public EntryRepository(TravelDiaryDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+        }
+
+        public async Task Create(Entry entry)
+        {
+            _dbContext.Entries.Add(entry);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

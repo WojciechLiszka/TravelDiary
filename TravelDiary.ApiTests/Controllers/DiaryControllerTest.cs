@@ -123,7 +123,7 @@ namespace TravelDiary.ApiTests.Controllers
         }
 
         [Fact]
-        public async Task Create_ForValidParams_ReturnsOk()
+        public async Task Create_ForValidParams_ReturnsCreated()
         {
             // arrange
             var role = new UserRole()
@@ -161,7 +161,7 @@ namespace TravelDiary.ApiTests.Controllers
             var response = await _userClient.PostAsync($"{_route}", httpContent);
             //assert
 
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         }
 
         [Theory]
@@ -729,13 +729,14 @@ namespace TravelDiary.ApiTests.Controllers
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
+
         [Theory]
         [InlineData(-1, 10, "sample", "Name", SortDirection.ASC)] // Negative page number
         [InlineData(1, 7, "sample", "Name", SortDirection.ASC)]  // Invalid page size
         [InlineData(1, 10, "sample", "invalidColumn", SortDirection.ASC)]  // Invalid sorting column
         [InlineData(0, -5, null, "title", SortDirection.DESC)]  // Combination of negative values
         [InlineData(1, -10, "sample", "date", SortDirection.ASC)] // Negative page size
-        public async Task GetDiaries_ForInvalidQueryParams_ReturnsBadRequest(int pageNumber,int pageSize,string searchPhrase,string sortBy,SortDirection sortDirection)
+        public async Task GetDiaries_ForInvalidQueryParams_ReturnsBadRequest(int pageNumber, int pageSize, string searchPhrase, string sortBy, SortDirection sortDirection)
         {
             //arrange
 

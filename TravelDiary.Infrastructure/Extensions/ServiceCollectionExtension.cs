@@ -22,6 +22,8 @@ namespace TravelDiary.Infrastructure.Extensions
 
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
+            services.AddScoped<IEntryRepository, EntryRepository>();
+
             services.AddScoped<RoleSeeder>();
 
             services.AddScoped<IUserContextService, UserContextService>();
