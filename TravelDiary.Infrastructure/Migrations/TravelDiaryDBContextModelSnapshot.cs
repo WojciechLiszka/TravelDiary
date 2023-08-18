@@ -17,7 +17,7 @@ namespace TravelDiary.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -59,9 +59,11 @@ namespace TravelDiary.Infrastructure.Migrations
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.Entry", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -94,8 +96,8 @@ namespace TravelDiary.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("EntryId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("EntryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Tittle")
                         .IsRequired()
