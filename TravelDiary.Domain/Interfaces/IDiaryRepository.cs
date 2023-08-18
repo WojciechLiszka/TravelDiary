@@ -11,5 +11,7 @@ namespace TravelDiary.Domain.Interfaces
         Task Delete(Diary diary);
 
         IQueryable<Diary> Search(string phrase);
+
+        Task Commit();
     }
 }

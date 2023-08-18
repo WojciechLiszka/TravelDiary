@@ -6,5 +6,7 @@ namespace TravelDiary.Domain.Interfaces
     {
         Task Create(Entry entry);
         Task<Entry?> GetById(int id);
+
+        Task Commit();
     }
 }

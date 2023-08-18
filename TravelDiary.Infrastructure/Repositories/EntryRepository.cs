@@ -25,5 +25,9 @@ namespace TravelDiary.Infrastructure.Repositories
             var entry = await _dbContext.Entries.FirstOrDefaultAsync();
             return entry;
         }
+        public async Task Commit()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

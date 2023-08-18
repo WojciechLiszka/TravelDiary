@@ -32,11 +32,14 @@ namespace TravelDiary.Application.DiaryService.Commands.UpdateDiaryDescription
             }
 
             var authorizationResult = await _authorization.AuthorizeAsync(_userContextService.User, diary, new DiaryResourceOperationRequirement(ResourceOperation.Update));
+
             if (!authorizationResult.Succeeded)
             {
                 throw new ForbiddenException();
             }
             diary.Description = request.Description;
+
+            await _diaryRepository.Commit();
         }
     }
 }
