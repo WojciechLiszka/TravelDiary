@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TravelDiary.Application.EntryService.Command.AddEntry;
-using TravelDiary.Application.EntryService.UpdateEntry;
+using TravelDiary.Application.EntryService.Command.DeleteEntry;
+using TravelDiary.Application.EntryService.Command.UpdateEntry;
 using TravelDiary.Domain.Dtos;
 
 namespace TravelDiary.Api.Controllers
@@ -28,6 +29,7 @@ namespace TravelDiary.Api.Controllers
                 Tittle = dto.Tittle,
                 Description = dto.Description,
             };
+
             var Id = await _mediator.Send(command);
 
             return Created($"/Api/EntryController/{Id}", null);
@@ -44,8 +46,24 @@ namespace TravelDiary.Api.Controllers
                 Tittle = dto.Tittle,
                 Description = dto.Description,
             };
+
             await _mediator.Send(command);
+
             return Ok();
+        }
+
+        [HttpDelete]
+        [Route("Entry/{entryId}")]
+        public async Task<ActionResult> DeleteEntry([FromRoute] int entryId)
+        {
+            var command = new DeleteEntryCommand()
+            {
+                EntryId = entryId
+            };
+
+            await _mediator.Send(command);
+
+            return NoContent();
         }
     }
 }

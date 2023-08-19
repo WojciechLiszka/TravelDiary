@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace TravelDiary.Application.EntryService.Command.DeleteEntry
 {
-    internal class DeleteEntryCommand
+    public class DeleteEntryCommand : IRequest
     {
+        public int EntryId { get; set; }
     }
 }
