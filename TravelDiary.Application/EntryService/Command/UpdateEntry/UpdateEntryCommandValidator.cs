@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace TravelDiary.Application.EntryService.UpdateEntry
+namespace TravelDiary.Application.EntryService.Command.UpdateEntry
 {
     public class UpdateEntryCommandValidator : AbstractValidator<UpdateEntryCommand>
     {

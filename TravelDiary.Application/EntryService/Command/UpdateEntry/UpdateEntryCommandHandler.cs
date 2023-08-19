@@ -5,7 +5,7 @@ using TravelDiary.Domain.Exceptions;
 using TravelDiary.Domain.Interfaces;
 using TravelDiary.Domain.Models;
 
-namespace TravelDiary.Application.EntryService.UpdateEntry
+namespace TravelDiary.Application.EntryService.Command.UpdateEntry
 {
     public class UpdateEntryCommandHandler : IRequestHandler<UpdateEntryCommand>
     {
