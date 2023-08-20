@@ -123,9 +123,10 @@ namespace TravelDiary.ApiTests.Controllers
         }
 
         [Fact]
-        public async Task Create_ForValidparams_ReturnsCreated()
+        public async Task Create_ForValidParams_ReturnsCreated()
         {
             // arrange
+
             var role = new UserRole()
             {
                 RoleName = "User"
@@ -173,6 +174,64 @@ namespace TravelDiary.ApiTests.Controllers
             //assert
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+        }
+
+        [Theory]
+        [InlineData("", "description", "2023 - 08 - 11T12: 00:00")] // Empty tittle
+        [InlineData(null, "description", "2023 - 08 - 11T12: 00:00")] // Null tittle
+        [InlineData("abc", "description", "2023 - 08 - 11T12: 00:00")] // Tittle to short
+        [InlineData("Tittle", "description", null)] // Empty date
+        public async Task Create_ForInvalidParams_ReturnsBadRequest(string title, string description, DateTime date)
+        {
+            // arrange
+
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(user);
+            await PrepareUserClient(user, role);
+            var diary = new Diary()
+            {
+                CreatedById = user.Id,
+                Description = "Description",
+                Name = "Name",
+                Starts = new DateTime(2008, 5, 1, 8, 30, 0),
+                Ends = new DateTime(2009, 5, 1, 8, 30, 0)
+            };
+            await SeedDiary(diary);
+
+            var dto = new CreateEntryDto()
+            {
+                Tittle = title,
+                Description = description,
+                Date = date
+            };
+            var httpContent = dto.ToJsonHttpContent();
+
+            // act
+
+            var response = await _userClient.PostAsync($"{_route}/Diary/{diary.Id}/Entry", httpContent);
+
+            //assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
     }
 }
