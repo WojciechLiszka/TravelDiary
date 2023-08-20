@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,15 +8,17 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using TravelDiary.ApiTests.Helpers;
+using TravelDiary.Domain.Dtos;
 using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Models;
 using TravelDiary.Infrastructure.Persistence;
 
 namespace TravelDiary.ApiTests.Controllers
 {
-    public class EntryRepository : IClassFixture<EntryRepository>
+    public class EntryControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
-        private const string _route = "Api/Diary";
+        private const string _route = "/Api";
         private readonly HttpClient _client;
         private readonly WebApplicationFactory<Program> _factory;
         private readonly AuthenticationSettings _authenticationSettings;
@@ -23,7 +26,7 @@ namespace TravelDiary.ApiTests.Controllers
         private readonly IConfiguration _configuration;
         private HttpClient _userClient;
 
-        public EntryRepository(WebApplicationFactory<Program> factory)
+        public EntryControllerTest(WebApplicationFactory<Program> factory)
         {
             _configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -117,6 +120,59 @@ namespace TravelDiary.ApiTests.Controllers
         {
             var userToken = GenerateJwtToken(user, role);
             _userClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userToken);
+        }
+
+        [Fact]
+        public async Task Create_ForValidparams_ReturnsCreated()
+        {
+            // arrange
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(user);
+            await PrepareUserClient(user, role);
+            var diary = new Diary()
+            {
+                CreatedById = user.Id,
+                Description = "Description",
+                Name = "Name",
+                Starts = new DateTime(2008, 5, 1, 8, 30, 0),
+                Ends = new DateTime(2009, 5, 1, 8, 30, 0)
+            };
+            await SeedDiary(diary);
+
+            var dto = new CreateEntryDto()
+            {
+                Tittle = "TestTittle",
+                Description = "Description",
+                Date = new DateTime(2008, 5, 1, 8, 30, 0)
+            };
+            var httpContent = dto.ToJsonHttpContent();
+
+            // act
+
+            var response = await _userClient.PostAsync($"{_route}/Diary/{diary.Id}/Entry", httpContent);
+
+            //assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace TravelDiary.Application.EntryService.Command.AddEntry
 
         async Task<string> IRequestHandler<AddEntryCommand, string>.Handle(AddEntryCommand request, CancellationToken cancellationToken)
         {
-            var diary = _diaryRepository.GetById(request.DiaryId);
+            var diary = await _diaryRepository.GetById(request.DiaryId);
 
             if (diary == null)
             {
