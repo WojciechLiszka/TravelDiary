@@ -24,7 +24,7 @@ namespace TravelDiary.Infrastructure.Persistence
                 eb
                .HasOne(u => u.UserRole)
                .WithMany(r => r.Users)
-               .HasForeignKey(u=>u.UserRoleId);
+               .HasForeignKey(u => u.UserRoleId);
 
                 eb
                 .Property(u => u.NickName)
@@ -36,14 +36,15 @@ namespace TravelDiary.Infrastructure.Persistence
                 eb
                 .HasMany(u => u.UserDiaries)
                 .WithOne(d => d.CreatedBy)
-                .HasForeignKey(d=>d.CreatedById);
+                .HasForeignKey(d => d.CreatedById);
             });
 
             modelBuilder.Entity<Diary>(eb =>
             {
                 eb
                  .HasMany(d => d.Entries)
-                 .WithOne(e => e.Diary);
+                 .WithOne(e => e.Diary)
+                 .HasForeignKey(e => e.DiaryId);
             });
             modelBuilder.Entity<Entry>(eb =>
             {

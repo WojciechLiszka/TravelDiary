@@ -27,30 +27,7 @@ namespace TravelDiary.Api.Controllers
         public async Task<ActionResult> Create(CreateDiaryCommand command)
         {
             var id = await _mediator.Send(command);
-            return Ok($"/Api/Diary/{id}");
-        }
-
-        [HttpPut]
-        [Authorize]
-        [Route("{diaryId}/Description")]
-        public async Task<ActionResult> UpdateDescription([FromRoute] int diaryId, [FromBody] string description)
-        {
-            var Command = new UpdateDiaryDescriptionCommand()
-            {
-                Id = diaryId,
-                Description = description
-            };
-
-            var validator = new UpdateDiaryDescriptionCommandValidator();
-
-            var validationResult = await validator.ValidateAsync(Command);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest();
-            }
-            await _mediator.Send(Command);
-
-            return Ok();
+            return Created($"/Api/Diary/{id}",null);
         }
 
         [HttpDelete]
@@ -78,6 +55,7 @@ namespace TravelDiary.Api.Controllers
 
             return Ok(result);
         }
+
         [HttpGet]
 
         public async Task<ActionResult<PagedResult<GetDiaryDto>>> GetDiaries([FromQuery] GetDiariesQuery query)
@@ -85,6 +63,29 @@ namespace TravelDiary.Api.Controllers
 
             var result = await _mediator.Send(query);
             return Ok(result);
+        }
+
+        [HttpPut]
+        [Authorize]
+        [Route("{diaryId}/Description")]
+        public async Task<ActionResult> UpdateDescription([FromRoute] int diaryId, [FromBody] string description)
+        {
+            var Command = new UpdateDiaryDescriptionCommand()
+            {
+                Id = diaryId,
+                Description = description
+            };
+
+            var validator = new UpdateDiaryDescriptionCommandValidator();
+
+            var validationResult = await validator.ValidateAsync(Command);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest();
+            }
+            await _mediator.Send(Command);
+
+            return Ok();
         }
     }
 }

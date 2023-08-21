@@ -17,7 +17,7 @@ namespace TravelDiary.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -54,14 +54,16 @@ namespace TravelDiary.Infrastructure.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.ToTable("Diaries");
+                    b.ToTable("Diaries", (string)null);
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.Entry", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -81,7 +83,7 @@ namespace TravelDiary.Infrastructure.Migrations
 
                     b.HasIndex("DiaryId");
 
-                    b.ToTable("Entries");
+                    b.ToTable("Entries", (string)null);
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.Photo", b =>
@@ -94,8 +96,8 @@ namespace TravelDiary.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("EntryId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("EntryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Tittle")
                         .IsRequired()
@@ -109,7 +111,7 @@ namespace TravelDiary.Infrastructure.Migrations
 
                     b.HasIndex("EntryId");
 
-                    b.ToTable("Photos");
+                    b.ToTable("Photos", (string)null);
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.User", b =>
@@ -134,7 +136,7 @@ namespace TravelDiary.Infrastructure.Migrations
 
                     b.HasIndex("UserRoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.UserRole", b =>
@@ -151,7 +153,7 @@ namespace TravelDiary.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("TravelDiary.Domain.Entities.Diary", b =>
@@ -195,7 +197,7 @@ namespace TravelDiary.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("TravelDiary.Domain.Entities.UserDetails", "UserDetails", b1 =>
+                    b.OwnsOne("TravelDiary.Domain.Entities.User.UserDetails#TravelDiary.Domain.Entities.UserDetails", "UserDetails", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
@@ -218,7 +220,7 @@ namespace TravelDiary.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("Users", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");

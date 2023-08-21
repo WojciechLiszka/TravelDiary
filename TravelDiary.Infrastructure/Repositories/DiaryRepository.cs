@@ -14,6 +14,11 @@ namespace TravelDiary.Infrastructure.Repositories
             _dbContext = travelDiaryDBContext;
         }
 
+        public async Task Commit()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task Create(Diary diary)
         {
             _dbContext.Add(diary);
