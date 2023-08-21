@@ -54,6 +54,14 @@ namespace TravelDiary.Api.Controllers
                 Description = dto.Description,
             };
 
+            var validator = new UpdateEntryCommandValidator();
+
+            var validationResult = await validator.ValidateAsync(command);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest();
+            }
+
             await _mediator.Send(command);
 
             return Ok();
