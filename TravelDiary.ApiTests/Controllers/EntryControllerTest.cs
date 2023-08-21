@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using TravelDiary.ApiTests.Helpers;
+using TravelDiary.Application.EntryService.Command.DeleteEntry;
 using TravelDiary.Domain.Dtos;
 using TravelDiary.Domain.Entities;
 using TravelDiary.Domain.Models;
@@ -112,6 +113,18 @@ namespace TravelDiary.ApiTests.Controllers
             if (!_dbContext.Diaries.Contains(diary))
             {
                 _dbContext.Diaries.Add(diary);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
+        private async Task SeedEntry(Entry entry)
+        {
+            var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
+            using var scope = scopeFactory.CreateScope();
+            var _dbContext = scope.ServiceProvider.GetService<TravelDiaryDbContext>();
+            if (!_dbContext.Entries.Contains(entry))
+            {
+                _dbContext.Entries.Add(entry);
                 await _dbContext.SaveChangesAsync();
             }
         }
@@ -305,6 +318,65 @@ namespace TravelDiary.ApiTests.Controllers
             //assert
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Forbidden);
+        }
+
+        [Fact]
+        public async Task Delete_ForValidId_ReturnsNoContent()
+        {
+            // arrange
+
+            var role = new UserRole()
+            {
+                RoleName = "User"
+            };
+            await SeedRole(role);
+
+            var user = new User()
+            {
+                NickName = "JDoe",
+                UserDetails = new UserDetails()
+                {
+                    Email = "test@email.com",
+                    Country = "USA",
+                    FirstName = "John",
+                    LastName = "Doe"
+                },
+
+                PasswordHash = "validPassword",
+                UserRoleId = role.Id,
+            };
+            await SeedUser(user);
+            await PrepareUserClient(user, role);
+            var diary = new Diary()
+            {
+                CreatedById = user.Id,
+                Description = "Description",
+                Name = "Name",
+                Starts = new DateTime(2008, 5, 1, 8, 30, 0),
+                Ends = new DateTime(2009, 5, 1, 8, 30, 0)
+            };
+            await SeedDiary(diary);
+            var entry = new Entry()
+            {
+                Tittle = "Tittle",
+                Description = "Description",
+                Date = new DateTime(2008, 5, 1, 8, 30, 0),
+                DiaryId = diary.Id,
+            };
+            await SeedEntry(entry);
+
+            var command = new DeleteEntryCommand()
+            {
+                EntryId = entry.Id,
+            };
+
+            //act
+
+            var response = await _userClient.DeleteAsync($"{_route}/Entry/{entry.Id}");
+
+            //assert
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
         }
     }
 }

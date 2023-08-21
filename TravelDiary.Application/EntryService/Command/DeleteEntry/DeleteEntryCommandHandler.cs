@@ -29,7 +29,7 @@ namespace TravelDiary.Application.EntryService.Command.DeleteEntry
             {
                 throw new ItemNotFoundException("Entry not found");
             }
-            var diary = _diaryRepository.GetById(entry.DiaryId);
+            var diary = await _diaryRepository.GetById(entry.DiaryId);
             if (diary == null)
             {
                 throw new Exception("Entry without Diary");
