@@ -22,7 +22,7 @@ namespace TravelDiary.Infrastructure.Repositories
 
         public async Task<Entry?> GetById(int id)
         {
-            var entry = await _dbContext.Entries.FirstOrDefaultAsync();
+            var entry = await _dbContext.Entries.FirstOrDefaultAsync(e => e.Id == id);
             return entry;
         }
 
