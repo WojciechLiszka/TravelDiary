@@ -4,12 +4,12 @@ namespace TravelDiary.Domain.Interfaces
 {
     public interface IEntryRepository
     {
-        Task Create(Entry entry);
-
-        Task<Entry?> GetById(int id);
-
         Task Commit();
 
+        Task Create(Entry entry);
+
         Task Delete(Entry entry);
+
+        Task<Entry?> GetById(int id);
     }
 }

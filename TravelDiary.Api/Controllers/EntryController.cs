@@ -42,6 +42,20 @@ namespace TravelDiary.Api.Controllers
             return Created($"/Api/EntryController/{Id}", null);
         }
 
+        [HttpDelete]
+        [Route("Entry/{entryId}")]
+        public async Task<ActionResult> DeleteEntry([FromRoute] int entryId)
+        {
+            var command = new DeleteEntryCommand()
+            {
+                EntryId = entryId
+            };
+
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
+
         [HttpPut]
         [Route("Entry/{entryId}")]
         public async Task<ActionResult> UpdateEntry([FromRoute] int entryId, [FromBody] CreateEntryDto dto)
@@ -65,20 +79,6 @@ namespace TravelDiary.Api.Controllers
             await _mediator.Send(command);
 
             return Ok();
-        }
-
-        [HttpDelete]
-        [Route("Entry/{entryId}")]
-        public async Task<ActionResult> DeleteEntry([FromRoute] int entryId)
-        {
-            var command = new DeleteEntryCommand()
-            {
-                EntryId = entryId
-            };
-
-            await _mediator.Send(command);
-
-            return NoContent();
         }
     }
 }

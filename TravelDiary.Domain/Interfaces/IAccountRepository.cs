@@ -4,18 +4,18 @@ namespace TravelDiary.Domain.Interfaces
 {
     public interface IAccountRepository
     {
-        Task<User?> TakeFirst(); //To Delete
+        Task Commit();
 
-        Task Register(User user);
+        Task Delete(User user);
 
         bool EmailInUse(string email);
 
         Task<User?> GetByEmail(string email);
 
-        Task Delete(User user);
-
         Task<User?> GetById(Guid id);
 
-        Task Commit();
+        Task Register(User user);
+
+        Task<User?> TakeFirst(); //To Delete
     }
 }

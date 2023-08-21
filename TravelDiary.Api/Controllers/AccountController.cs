@@ -19,26 +19,6 @@ namespace TravelDiary.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
-        [Route("Register")]
-        public async Task<ActionResult> Register([FromBody] RegisterUserAccountCommand command)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-            await _mediator.Send(command);
-            return Ok();
-        }
-
-        [HttpPost]
-        [Route("Login")]
-        public async Task<ActionResult<string>> Login([FromBody] LoginUserAccountCommand command)
-        {
-            var token = await _mediator.Send(command);
-            return Ok(token);
-        }
-
         [HttpDelete]
         [Authorize]
         public async Task<ActionResult> Delete([FromQuery] string password)
@@ -52,6 +32,25 @@ namespace TravelDiary.Api.Controllers
             return NoContent();
         }
 
+        [HttpPost]
+        [Route("Login")]
+        public async Task<ActionResult<string>> Login([FromBody] LoginUserAccountCommand command)
+        {
+            var token = await _mediator.Send(command);
+            return Ok(token);
+        }
+
+        [HttpPost]
+        [Route("Register")]
+        public async Task<ActionResult> Register([FromBody] RegisterUserAccountCommand command)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            await _mediator.Send(command);
+            return Ok();
+        }
         [HttpPut]
         [Authorize]
         public async Task<ActionResult> Update([FromBody] UpdateUserDetailsCommand command)

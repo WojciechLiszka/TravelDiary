@@ -4,14 +4,14 @@ namespace TravelDiary.Domain.Interfaces
 {
     public interface IDiaryRepository
     {
-        Task Create(Diary diary);
+        Task Commit();
 
-        Task<Diary?> GetById(int id);
+        Task Create(Diary diary);
 
         Task Delete(Diary diary);
 
-        IQueryable<Diary> Search(string phrase);
+        Task<Diary?> GetById(int id);
 
-        Task Commit();
+        IQueryable<Diary> Search(string phrase);
     }
 }
