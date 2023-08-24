@@ -43,6 +43,7 @@ namespace TravelDiary.Application.EntryService.Command.AddEntry
                 Date = request.Date,
                 Tittle = request.Tittle,
                 Description = request.Description,
+                DiaryId = request.DiaryId,
             };
             await _entryRepository.Create(entry);
 
