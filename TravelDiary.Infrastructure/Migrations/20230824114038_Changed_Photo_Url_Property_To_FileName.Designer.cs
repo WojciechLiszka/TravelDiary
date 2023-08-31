@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelDiary.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using TravelDiary.Infrastructure.Persistence;
 namespace TravelDiary.Infrastructure.Migrations
 {
     [DbContext(typeof(TravelDiaryDbContext))]
-    partial class TravelDiaryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230824114038_Changed_Photo_Url_Property_To_FileName")]
+    partial class Changed_Photo_Url_Property_To_FileName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

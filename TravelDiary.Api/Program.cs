@@ -3,6 +3,7 @@ using TravelDiary.Api.Middleware;
 using TravelDiary.Application.Extensions;
 using TravelDiary.Infrastructure.Extensions;
 using TravelDiary.Infrastructure.Seeders;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,12 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication(builder.Configuration);
 
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
+
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddBlobServiceClient(builder.Configuration["TravelDiaryStorage:blob"], preferMsi: true);
+    clientBuilder.AddQueueServiceClient(builder.Configuration["TravelDiaryStorage:queue"], preferMsi: true);
+});
 
 var app = builder.Build();
 
