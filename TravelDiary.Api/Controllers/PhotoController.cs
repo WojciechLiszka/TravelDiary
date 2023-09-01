@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TravelDiary.Application.PhotoService.Command.AddPhotoToEntry;
 using TravelDiary.Application.PhotoService.Command.UpdatePhotoDetails;
 using TravelDiary.Application.PhotoService.Queries;
+using TravelDiary.Application.PhotoService.Queries.GetPhotoDetails;
 using TravelDiary.Domain.Models;
 
 namespace TravelDiary.Api.Controllers
@@ -53,11 +54,11 @@ namespace TravelDiary.Api.Controllers
         [Route("Photo/{photoId}")]
         public async Task<IActionResult> Download([FromRoute] Guid photoId)
         {
-            var command = new GetPhotoQuery()
+            var query = new GetPhotoQuery()
             {
                 Id = photoId
             };
-            var response = await _mediator.Send(command);
+            var response = await _mediator.Send(query);
 
             if (response.PhotoName == null || response.Content == null || response.ContentType == null)
             {
@@ -65,6 +66,20 @@ namespace TravelDiary.Api.Controllers
             }
 
             return File(response.Content, response.ContentType, fileDownloadName: response.PhotoName);
+        }
+
+        [HttpGet]
+        [Route("Photo/{photoId}/Details")]
+        public async Task<ActionResult<PhotoDetails>> GetPhotoDetails([FromRoute] Guid photoId)
+        {
+            var query = new GetPhotoDetailsQuery()
+            {
+                Id = photoId
+            };
+
+            var response = await _mediator.Send(query);
+
+            return Ok(response);
         }
     }
 }
