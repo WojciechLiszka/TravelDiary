@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelDiary.Application.PhotoService.Command.AddPhotoToEntry;
 using TravelDiary.Application.PhotoService.Command.UpdatePhotoDetails;
@@ -21,6 +22,7 @@ namespace TravelDiary.Api.Controllers
 
         [HttpPost]
         [Route("Entry/{entryId}/Photo")]
+        [Authorize]
         public async Task<ActionResult<string>> AddPhotoToEntry([FromRoute] int entryId, IFormFile file)
         {
             var command = new AddPhotoToEntryCommand()
@@ -36,6 +38,7 @@ namespace TravelDiary.Api.Controllers
 
         [HttpPut]
         [Route("Photo/{photoId}")]
+        [Authorize]
         public async Task<ActionResult> UpdatePhotoDetails([FromRoute] Guid photoId, PhotoDetails photoDetails)
         {
             var command = new UpdatePhotoDetailsCommand()

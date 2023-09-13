@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelDiary.Application.EntryService.Command.AddEntry;
 using TravelDiary.Application.EntryService.Command.DeleteEntry;
@@ -20,6 +21,7 @@ namespace TravelDiary.Api.Controllers
 
         [HttpPost]
         [Route("Diary/{diaryId}/Entry")]
+        [Authorize]
         public async Task<ActionResult<string>> AddEntryToDiary([FromRoute] int diaryId, [FromBody] CreateEntryDto dto)
         {
             var command = new AddEntryCommand()
@@ -44,6 +46,7 @@ namespace TravelDiary.Api.Controllers
 
         [HttpDelete]
         [Route("Entry/{entryId}")]
+        [Authorize]
         public async Task<ActionResult> DeleteEntry([FromRoute] int entryId)
         {
             var command = new DeleteEntryCommand()
@@ -58,6 +61,7 @@ namespace TravelDiary.Api.Controllers
 
         [HttpPut]
         [Route("Entry/{entryId}")]
+        [Authorize]
         public async Task<ActionResult> UpdateEntry([FromRoute] int entryId, [FromBody] CreateEntryDto dto)
         {
             var command = new UpdateEntryCommand()
