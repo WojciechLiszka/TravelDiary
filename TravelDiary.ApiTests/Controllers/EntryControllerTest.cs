@@ -273,6 +273,9 @@ namespace TravelDiary.ApiTests.Controllers
                 Starts = new DateTime(2008, 5, 1, 8, 30, 0),
                 Ends = new DateTime(2009, 5, 1, 8, 30, 0)
             };
+
+            await PrepareUserClient(user, role);
+
             await SeedDiary(diary);
             var entry = new Entry()
             {
@@ -496,7 +499,7 @@ namespace TravelDiary.ApiTests.Controllers
         }
 
         [Theory]
-        [InlineData("", "Description", "2023 - 08 - 11T12: 00:00")] //empty tittle     
+        [InlineData("", "Description", "2023 - 08 - 11T12: 00:00")] //empty tittle
         [InlineData(null, "Description", "2023 - 08 - 11T12: 00:00")] //null tittle
         [InlineData("Tittle", "description", null)] //null date
         [InlineData("T", "description", "2023 - 08 - 11T12: 00:00")] //tittle to short
